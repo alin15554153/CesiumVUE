@@ -1,0 +1,143 @@
+.ivu-select-dropdown {
+    width: 40px;
+    top:43px;
+    background-color: rgba(0,0,0,0);
+    overflow: auto;
+    margin: 10px 0;
+    padding: 0px 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 0px;
+    -webkit-box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    position: absolute;
+    z-index: 900
+}
+.ivu-dropdown-menu {
+    min-width: 40px;
+}
+.ivu-dropdown-item {
+    margin: 0;
+    line-height: normal;
+    padding: 0px 0px;
+    clear: both;
+    color: #515a6e;
+    font-size: 12px!important;
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+}
+
+/*--------toolbar start*/
+a {
+    color: #3f8eb9;
+    text-decoration: none;
+}
+
+.btn-toolbar{
+    margin-left: -5px;
+    z-index: 1;
+}
+.btn-group{
+    position : relative;
+    display : inline-block;
+    vertical-align : middle;
+}
+.btn-toolbar>.btn-group{
+    margin-left : 5px;
+}
+.btn-toolbar .btn,.btn-toolbar .toolbar,.btn-toolbar .input-group{
+    float : left;
+}
+.btn{
+    display : inline-block;
+    margin-bottom : 0;
+    text-align : center;
+    white-space : nowrap;
+    touch-action : manipulation;
+    cursor : pointer;
+    -webkit-user-select : none;
+    background-image : none;
+    padding : 10px 12px;
+    font-size : 17px;
+    font-weight : 400;
+    line-height : 1.4;
+    border : none;
+    vertical-align : middle;
+    transition : border .25s linear,color .25s linear,background-color .25s linear;
+    -webkit-font-smoothing : subpixel-antialiased;
+    -webkit-transition : border .25s linear,color .25s linear,background-color .25s linear;
+}
+.btn:active{
+    box-shadow : none;
+}
+.btn:hover,.btn:focus{
+    color: #e5e1e1;
+    outline: 1px;
+    border-color: #c0baba;
+}
+.btn-inverse {
+    color : #2ec5ad;
+    background-color: rgba(38, 38, 38, 0.75);
+}
+.btn-inverse:hover,.btn-inverse.hover,.btn-inverse:active,.btn-inverse.active,.btn-inverse.focus,.open>dropdown-toggle.btn-inverse{
+    background : #2c3e50;
+    color : #fff;
+}
+.btn-group>.btn{
+    font-weight : 400;
+}
+.btn-group>.btn:first-child{
+    margin-left : 0;
+}
+.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
+    border-top-right-radius : 0;
+    border-bottom-right-radius : 0;
+}
+.btn-group>.btn-group:last-child:not(:first-child)>.btn:first-child{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.btn-toolbar .btn>[class^=fui-]{
+    margin: 0 1px;
+    font-size : 16px;
+}
+.btn [class^=fui-]{
+    position : relative;
+    top : 1px;
+    margin: 0 1px;
+    line-height : 1;
+}
+.btn [class^="smicon-"] {
+    position: relative;
+    top: 1px;
+    margin: 0 1px;
+    line-height: 1;
+}
+.btn-xs.btn [class^="smicon-"] {
+    top: 0;
+    font-size: 11px;
+}
+.btn-hg.btn [class^="smicon-"] {
+    top: 2px;
+}
+.btn-toolbar .btn > [class^="smicon-"] {
+    margin: 0 1px;
+    font-size: 16px;
+}
+.btn-group>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle){
+    border-radius : 0;
+}
+.btn-group>.btn:last-child:not(:first-child), .btn-group>.dropdown-toggle:not(:first-child){
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.btn-group>.btn+.btn{
+    margin-left : 0;
+}
+.btn-group-vertical>.btn, .btn-group>.btn{
+    position: relative;
+    float: left;
+}
+/*--------toolbar end*/
