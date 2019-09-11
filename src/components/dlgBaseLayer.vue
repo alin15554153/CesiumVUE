@@ -1,5 +1,5 @@
 <template>
-  <el-tabs id='baseLayerGroup' v-model="activeName" @tab-click="handleClick">
+  <el-tabs id='dlgBaseLayer' v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="卫星影像" name="first">
       <div>
       </div>
@@ -17,7 +17,7 @@
 <script>
 
   export default {
-    name: 'baseLayerGroup',
+    name: 'dlgBaseLayer',
 
     props: {
       isShow: {
@@ -70,13 +70,13 @@
 
 <style type="less">
 
-  #baseLayerGroup .el-tabs__header {
+  #dlgBaseLayer .el-tabs__header {
     padding: 0;
     position: relative;
     margin: 0 0 0px;
   }
 
-  #baseLayerGroup .el-tabs__item {
+  #dlgBaseLayer .el-tabs__item {
     padding: 0px 20px;
     height: 40px;
     -webkit-box-sizing: border-box;
@@ -90,22 +90,22 @@
     position: relative;
   }
 
-  #baseLayerGroup .el-tabs__item:hover {
+  #dlgBaseLayer .el-tabs__item:hover {
     color: #409EFF;
     cursor: pointer;
   }
 
-  #baseLayerGroup .el-tabs__item.is-active {
+  #dlgBaseLayer .el-tabs__item.is-active {
     color: #409EFF;
   }
 
-  #baseLayerGroup .el-tabs__content {
+  #dlgBaseLayer .el-tabs__content {
     overflow: hidden;
     position: relative;
     height: 100%;
   }
 
-  #baseLayerGroup .el-tab-pane {
+  #dlgBaseLayer .el-tab-pane {
     height: 398px;
     background-color: rgba(38, 38, 38, 0.7);
   }

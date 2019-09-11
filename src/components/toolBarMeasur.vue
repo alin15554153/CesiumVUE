@@ -15,7 +15,7 @@
 <script>
   import   Cesium from 'cesium/Cesium'
   export default {
-    name: 'measurBarGroup',
+    name: 'toolBarMeasur',
     methods:{
       measurePoint(){
         let viewer = this.viewer;

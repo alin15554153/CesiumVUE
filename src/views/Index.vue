@@ -3,12 +3,12 @@
     <div id="cesiumContainer"></div>
     <toolBar @on-open="openDialog"></toolBar>
 
-    <dialogCom v-show ='isPathNavigation' @on-close="closeDialog('isPathNavigation')">
-      <pathNavigation></pathNavigation>
+    <dialogCom v-show ='isShowPathNav' @on-close="closeDialog('isShowPathNav')">
+      <dlgPathNav></dlgPathNav>
     </dialogCom>
 
-    <dialogCom v-show ='isShowbaseLayerGroup' @on-close="closeDialog('isShowbaseLayerGroup')">
-      <baseLayerGroup></baseLayerGroup>
+    <dialogCom v-show ='isShowbaseLayer' @on-close="closeDialog('isShowbaseLayer')">
+      <dlgBaseLayer></dlgBaseLayer>
     </dialogCom>
 
 
@@ -26,8 +26,8 @@
 
 <script>
 import toolBar from '../components/toolBar'
-import baseLayerGroup from '../components/baseLayerGroup'
-import pathNavigation from '../components/pathNavigation'
+import dlgBaseLayer from '../components/dlgBaseLayer'
+import dlgPathNav from '../components/dlgPathNav'
 import dialogCom from '../components/dialogCom'
 import Vue from 'vue'
 import testChild from '../components/test_child'
@@ -35,16 +35,16 @@ export default {
   components: {
     toolBar,
     dialogCom,
-    baseLayerGroup,
-    pathNavigation,
+    dlgBaseLayer,
+    dlgPathNav,
     testChild
   },
   name: 'Index',
   data () {
     return {
-      isShowbaseLayerGroup: false,
-      isPathNavigation: false,
-      pathNavigationPage:1,
+      isShowbaseLayer: false,
+      isShowPathNav: false,
+      dlgPathNavPage:1,
       testParentData: '父组件21数据123',
       PtoCData: '传给子组件',
       CtoPData: '等待接收'

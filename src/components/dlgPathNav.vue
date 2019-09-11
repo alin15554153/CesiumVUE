@@ -1,5 +1,5 @@
 <template>
-  <el-tabs id='pathNavigation' v-model="activeName" @tab-click="handleClick">
+  <el-tabs id='dlgPathNav' v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="特定场景" name="first">
       <el-container>
         <el-header height = '40px'>
@@ -91,12 +91,12 @@
     },
     computed:{
       listensPage(){
-        return this.$store.state.pathNavigationPageName;
+        return this.$store.state.dlgPathNavPageName;
       }
     },
     watch: {
       listensPage: function() {
-        this.activeName = this.$store.state.pathNavigationPageName;
+        this.activeName = this.$store.state.dlgPathNavPageName;
       }
     },
     methods: {
@@ -164,7 +164,7 @@
     color: #409EFF;
   }
 
-  #pathNavigation .el-collapse-item__header {
+  #dlgPathNav .el-collapse-item__header {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -183,7 +183,7 @@
     transition: border-bottom-color .3s;
     outline: 0;
   }
-  #pathNavigation .el-collapse-item__wrap {
+  #dlgPathNav .el-collapse-item__wrap {
     will-change: height;
     background-color: rgba(255, 255, 255, 0);
     overflow: hidden;
@@ -192,13 +192,13 @@
     border-bottom: 1px solid #2ec5ad;
   }
 
-  #pathNavigation .el-tabs__header {
+  #dlgPathNav .el-tabs__header {
     padding: 0;
     position: relative;
     margin: 0 0 0px;
   }
 
-  #pathNavigation .el-tabs__item {
+  #dlgPathNav .el-tabs__item {
     padding: 0px 20px;
     height: 40px;
     -webkit-box-sizing: border-box;
@@ -212,27 +212,27 @@
     position: relative;
   }
 
-  #pathNavigation .el-tabs__item:hover {
+  #dlgPathNav .el-tabs__item:hover {
     color: #409EFF;
     cursor: pointer;
   }
 
-  #pathNavigation .el-tabs__item.is-active {
+  #dlgPathNav .el-tabs__item.is-active {
     color: #409EFF;
   }
 
-  #pathNavigation .el-tabs__content {
+  #dlgPathNav .el-tabs__content {
     overflow: hidden;
     position: relative;
     height: 100%;
   }
 
-  #pathNavigation .el-tab-pane {
+  #dlgPathNav .el-tab-pane {
     height: 100%;
     background-color: rgba(38, 38, 38, 0.7);
   }
 
-  #pathNavigation .el-header {
+  #dlgPathNav .el-header {
     padding: 2px 5px;
     font-size: 16px;
     -webkit-box-sizing: border-box;
@@ -241,7 +241,7 @@
     flex-shrink: 0;
   }
 
-  #pathNavigation .el-button {
+  #dlgPathNav .el-button {
     display: inline-block;
     line-height: 1;
     white-space: nowrap;
@@ -264,12 +264,12 @@
   }
 
 
-  #pathNavigation .el-button:hover{
+  #dlgPathNav .el-button:hover{
     color: #e5e1e1;
     background : #2c3e50;
   }
 
-  #pathNavigation .el-main {
+  #dlgPathNav .el-main {
     display: block;
     -webkit-box-flex: 1;
     -ms-flex: 1;

@@ -30,12 +30,12 @@
             </el-dropdown-menu>
           </el-dropdown>
         </a>
-        <a   title='定位导航' class='btn btn-inverse' @click="onPathNavigationBtnClk('first')">
+        <a   title='定位导航' class='btn btn-inverse' @click="ondlgPathNavBtnClk('first')">
           <el-dropdown trigger="hover" placement="bottom">
             <span class='el-icon-video-camera-solid'></span>
             <el-dropdown-menu>
-              <el-dropdown-item><a   title='特定场景' class='btn btn-inverse' @click="onPathNavigationBtnClk('first')"><span class='el-icon-camera-solid'></span></a></el-dropdown-item>
-              <el-dropdown-item><a   title='飞行路线' class='btn btn-inverse' @click="onPathNavigationBtnClk('second')"><span class='el-icon-s-promotion'></span></a></el-dropdown-item>
+              <el-dropdown-item><a   title='特定场景' class='btn btn-inverse' @click="ondlgPathNavBtnClk('first')"><span class='el-icon-camera-solid'></span></a></el-dropdown-item>
+              <el-dropdown-item><a   title='飞行路线' class='btn btn-inverse' @click="ondlgPathNavBtnClk('second')"><span class='el-icon-s-promotion'></span></a></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </a>
@@ -53,14 +53,14 @@
 </template>
 
 <script>
-import measurBarGroup from './measurBarGroup'
+import measurBarGroup from './toolBarMeasur'
 export default {
   components: { measurBarGroup: measurBarGroup },
   name: 'toolBar',
   data () {
     return {
       visible: false,
-      pathNavigationShow: false
+      dlgPathNavShow: false
 
     }
   },
@@ -89,14 +89,14 @@ export default {
       $('#expandBtn').hide()
     },
 
-    onPathNavigationBtnClk (name) {
-      this.$store.commit('setPathNavigationPageName',name)
-      this.$emit('on-open','isPathNavigation')
+    ondlgPathNavBtnClk (name) {
+      this.$store.commit('setdlgPathNavPageName',name)
+      this.$emit('on-open','isShowPathNav')
     },
 
     onBaseLayerBtnClk (name) {
       this.$store.commit('setBaseLayerGroupPageName',name)
-      this.$emit('on-open','isShowbaseLayerGroup')
+      this.$emit('on-open','isShowbaseLayer')
     },
     setView (lon, lat, height) {
       this.viewer.camera.setView({
