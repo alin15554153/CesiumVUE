@@ -127,7 +127,6 @@
         alert('请完善此编辑方法')
       },
       ViewType(event){
-        console.log(event)
         if(event.path[0].tagName==='I') {
           if (event.path[0].className == "el-icon-s-unfold") {
             event.path[0].className = "el-icon-menu"

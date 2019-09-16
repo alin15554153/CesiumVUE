@@ -74,15 +74,7 @@ export default {
 
   },
   watch:{
-    viewer1Listener:function () {
-      if(this.viewer1Listener == true){
-        // alert("1+")
-        // this.viewer.camera.changed.addEventListener(this.sync2DView);
-      }else{
-        // alert("1-")
-        // this.viewer.camera.changed.removeEventListener(this.sync2DView);
-      }
-    }
+
   },
   mounted () {
     this.initViewer1();

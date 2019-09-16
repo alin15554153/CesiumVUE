@@ -82,15 +82,7 @@
       }
     },
     watch: {
-      isviewer1Listener:function() {
-        if (this.$parent.$data.viewer1Listener==true){
-          // alert('2-')
-          // this.viewer2.camera.changed.removeEventListener(this.sync2DView);
-        }else {
-          // alert('2+')
-          // this.viewer2.camera.changed.addEventListener(this.sync2DView);
-        }
-      }
+
     },
   }
 </script>

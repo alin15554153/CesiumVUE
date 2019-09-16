@@ -19,7 +19,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </a>
-        <a title='添加模型' class='btn'><span class='iconfont icon-shiliangzhinengduixiang'></span></a>
+        <a title='添加模型' class='btn'><span class='iconfont icon-shiliangzhinengduixiang' @click="onModel3dBtnClk"></span></a>
         <a title='添加矢量' class='btn'>
           <el-dropdown trigger="hover" placement="bottom">
             <span class='iconfont icon-shiliang'></span>
@@ -88,13 +88,14 @@ export default {
       $('#btnGroup').show()
       $('#expandBtn').hide()
     },
-
+    onModel3dBtnClk(){
+      this.$parent.$data.isShowModel3d = true//显示路径面板
+    },
     onDlgPathNavBtnClk (name) {
       this.$parent.$data.isShowPathNav = true//显示路径面板
       this.$store.commit('setdlgPathNavPageName',name)
     },
     onSplitScreen(event){
-      console.log(event)
       if(event.path[0].tagName==='SPAN'){
         if ( event.path[0].className =="iconfont icon-fenpingduibi"){
           event.path[0].className="iconfont icon-t02";//切换图标
