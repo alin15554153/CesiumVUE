@@ -18,12 +18,12 @@
     </el-tab-pane>
 
     <el-tab-pane label="服务" name="second">
-      <el-container>
+
         <el-input placeholder="请输入路径地址" v-model="tileUrl">
           <template slot="prepend">Http://</template>
           <el-button slot="append">确认</el-button>
         </el-input>
-      </el-container>
+
     </el-tab-pane>
     <el-tab-pane label="模型库" name="three">
       <el-container>
@@ -316,7 +316,7 @@
     -ms-flex-negative: 0;
     flex-shrink: 0;
   }
-
+  /*容器头里的button*/
   #dlgModel3d .el-button {
     display: inline-block;
     line-height: 1;
@@ -339,11 +339,12 @@
     border-radius: 4px;
   }
 
-
+  /*容器头里的button*/
   #dlgModel3d .el-button:hover{
     color: #e5e1e1;
     background : #2c3e50;
   }
+  /*容器头里的button*/
   #dlgModel3d .el-button i{
     padding: 8px 6px;
   }

@@ -117,6 +117,7 @@ export default {
 
 
 
+
       this.viewer.camera.changed.addEventListener(this.sync2DView);
       let _drawHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
       _drawHandler.setInputAction(function (event) {
