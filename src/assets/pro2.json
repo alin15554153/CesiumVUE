@@ -1,0 +1,44 @@
+{
+  "proName":"demo1",
+  "camPointArr":[
+    {"groupName": "特定场景组1",
+      "group":[
+        {"name":"特定场景1","x": 119.1,"y": 32.1,"z": 50000,"heading":10,"pitch":-90,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景2","x": 119.2,"y": 32.2,"z": 50000,"heading":20,"pitch":-80,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景3","x": 119.3,"y": 32.3,"z": 50000,"heading":30,"pitch":-70,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景4","x": 119.4,"y": 32.4,"z": 50000,"heading":40,"pitch":-60,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景5","x": 119.5,"y": 32.5,"z": 50000,"heading":50,"pitch":-50,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3}
+      ]
+    },
+    {"groupName": "特定场景组2",
+      "group":[
+        {"name":"特定场景1","x": 119.1,"y": 32.1,"z": 50000,"heading":10,"pitch":-90,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景2","x": 119.2,"y": 32.2,"z": 50000,"heading":20,"pitch":-80,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景3","x": 119.3,"y": 32.3,"z": 50000,"heading":30,"pitch":-70,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景4","x": 119.4,"y": 32.4,"z": 50000,"heading":40,"pitch":-60,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景5","x": 119.5,"y": 32.5,"z": 50000,"heading":50,"pitch":-50,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3}
+      ]
+    }
+  ],
+  "camLineArr":[
+    {"groupName": "特定场景组1",
+      "group":[
+        {"name":"特定场景1","x": 119.1,"y": 32.1,"z": 50000,"heading":10,"pitch":-90,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景2","x": 119.2,"y": 32.2,"z": 50000,"heading":20,"pitch":-80,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景3","x": 119.3,"y": 32.3,"z": 50000,"heading":30,"pitch":-70,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景4","x": 119.4,"y": 32.4,"z": 50000,"heading":40,"pitch":-60,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景5","x": 119.5,"y": 32.5,"z": 50000,"heading":50,"pitch":-50,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3}
+      ]
+    },
+    {"groupName": "特定场景组2",
+      "group":[
+        {"name":"特定场景1","x": 119.1,"y": 23.1,"z": 500,"heading":10,"pitch":-90,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景2","x": 119.2,"y": 23.2,"z": 400,"heading":20,"pitch":-80,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景3","x": 119.3,"y": 23.3,"z": 300,"heading":30,"pitch":-70,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景4","x": 119.4,"y": 23.4,"z": 300,"heading":40,"pitch":-60,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 3},
+        {"name":"特定场景5","x": 119.5,"y": 23.5,"z": 300,"heading":50,"pitch":-50,"roll":0,"imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg","time": 10}
+      ]
+    }
+  ]
+
+}

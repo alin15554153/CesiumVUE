@@ -13,53 +13,20 @@
             <el-button  type="text" title="替换" icon="el-icon-connection" @click="replaceView"></el-button>
             <el-button  type="text" title="修改" icon="el-icon-edit" @click="editView"></el-button>
             <el-divider direction="vertical"></el-divider>
+            <el-button  type="text" title="导出"  icon="el-icon-download" @click="savePoint"></el-button>
             <el-button  type="text" title="缩略图显示"  icon="el-icon-menu" @click="ViewType"></el-button>
           </el-row>
         </el-header>
         <el-main>
           <el-collapse v-model="activeName2" accordion>
-            <el-collapse-item title="图层1" name="1">
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景1</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景2</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景3</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景4</p>
-              </div>
-            </el-collapse-item>
-            <el-collapse-item title="图层2" name="2">
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景1</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景2</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景3</p>
-              </div>
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景4</p>
-              </div>
-            </el-collapse-item>
-            <el-collapse-item title="图层3" name="3">
-              <div class="picdiv">
-                <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-                <p class="pictext">特定场景4</p>
-              </div>
-            </el-collapse-item>
+
+              <el-collapse-item v-bind:title = "item.groupName"   v-bind:name="index" v-for="(item,index) in camPointData" v-bind:key="item.id">
+                <div class="picdiv" v-for="item2 in item.group">
+                  <img v-bind:src="item2.imgSrc" alt="" @click="flyToPoint(item2.x,item2.y,item2.z,item2.heading,item2.pitch,item2.roll,item2.time)" />
+                  <p class="pictext">{{item2.name}}</p>
+                </div>
+              </el-collapse-item>
+
           </el-collapse>
         </el-main>
       </el-container>
@@ -77,18 +44,25 @@
       </el-container>
     </el-tab-pane>
   </el-tabs>
+
 </template>
 
 <script>
   export default {
     data () {
       return {
+        camPointData:{},
         selectElement: '',
         activeName: 'first',
         activeName2: '1',
         src:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
       }
     },
+    mounted () {
+      let url =  require('../assets/pro2.json')
+      this.camPointData = url.camPointArr
+    },
+
     computed:{
       listensPage(){
         return this.$store.state.dlgPathNavPageName;
@@ -100,6 +74,55 @@
       }
     },
     methods: {
+      getCamPos(){
+        let position = this.viewer.scene.camera.positionWC;
+
+        let cartographic= this.viewer.scene.globe.ellipsoid.cartesianToCartographic(position);
+        //将地图坐标（弧度）转为十进制的度数
+        let lat_String=Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
+        let log_String=Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
+        let alt_String=(this.viewer.camera.positionCartographic.height/1000).toFixed(2);
+
+        let heading = this.viewer.scene.camera.heading;
+        let pitch = this.viewer.scene.camera.pitch;
+        let roll = this.viewer.scene.camera.roll;
+        return {x:log_String,y:lat_String,z:alt_String}
+      },
+      addView(){
+          console.log(this.camPointData)
+      },
+      flyToPoint(lon, lat, height,heading, pitch,roll,duration){
+        this.viewer.camera.flyTo({
+          destination : Cesium.Cartesian3.fromDegrees(lon, lat, height),
+          orientation : {
+            heading : Cesium.Math.toRadians(heading),
+            pitch : Cesium.Math.toRadians( pitch),
+            roll : roll
+          },
+          duration:duration
+        });
+      },
+      setView (lon, lat, height) {
+        this.viewer.camera.setView({
+          destination: Cesium.Cartesian3.fromDegrees(lon, lat, height), // 设置位置
+          orientation: {
+            heading: Cesium.Math.toRadians(0.0), // 方向
+            pitch: Cesium.Math.toRadians(-90.0), // 倾斜角度
+            roll: 0
+          }
+        })
+      },
+      //保存相机点
+      savePoint(){
+        var FileSaver = require('file-saver');
+        let data = {
+          name:"hanmeimei",
+          age:88
+        }
+        var content = JSON.stringify(data);
+        var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+        FileSaver.saveAs(blob, "save.json");
+      },
       /** 切换tab */
       handleClick (tab, event) {
         // paneName
@@ -114,9 +137,7 @@
       editGroup(){
         alert('请完善编辑分组方法')
       },
-      addView(){
-        alert('请完成添加方法')
-      },
+
       delView(){
         alert('请完善删除方法')
       },

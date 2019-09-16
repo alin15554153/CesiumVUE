@@ -88,13 +88,16 @@ export default {
       $('#btnGroup').show()
       $('#expandBtn').hide()
     },
+    //显示加载模型对话框
     onModel3dBtnClk(){
       this.$parent.$data.isShowModel3d = true//显示路径面板
     },
+    //显示路径导航对话框
     onDlgPathNavBtnClk (name) {
       this.$parent.$data.isShowPathNav = true//显示路径面板
       this.$store.commit('setdlgPathNavPageName',name)
     },
+    //显示分屏
     onSplitScreen(event){
       if(event.path[0].tagName==='SPAN'){
         if ( event.path[0].className =="iconfont icon-fenpingduibi"){
@@ -112,7 +115,7 @@ export default {
     },
     onBaseLayerBtnClk (name) {
       this.$store.commit('setBaseLayerGroupPageName',name)
-      this.$parent.$data.isShowPathNav = true//显示底图面板
+      this.$parent.$data.isShowBaseLayer = true//显示底图面板
     },
     setView (lon, lat, height) {
       this.viewer.camera.setView({
