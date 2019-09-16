@@ -111,8 +111,9 @@ export default {
       }
     },
     onBaseLayerBtnClk (name) {
+      debugger
       this.$store.commit('setBaseLayerGroupPageName',name)
-      this.$parent.$data.isShowPathNav = true//显示底图面板
+      this.$parent.$data.isShowBaseLayer = true//显示底图面板
     },
     setView (lon, lat, height) {
       this.viewer.camera.setView({
