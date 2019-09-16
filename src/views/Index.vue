@@ -41,6 +41,7 @@ import dlgModel3d from '../components/dlgModel3d'
 import dlgSplitScreen from '../components/dlgSplitScreen'
 
 import testChild from '../components/test_child'
+import ToolManager from '../js/tools/toolManager'
 
 export default {
   components: {
@@ -111,6 +112,7 @@ export default {
       viewer.scene.screenSpaceCameraController.enableLook = true;
 
       Vue.prototype.viewer = viewer
+      Vue.prototype.viewer.ToolManager = new ToolManager(viewer);
 
 
 
