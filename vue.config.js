@@ -49,7 +49,7 @@ module.exports = {
         $:"jquery",
         jQuery:"jquery",
         "windows.jQuery":"jquery",
-        Cesium:'cesium/Cesium.js'
+        Cesium:'cesium/Cesium'
       })
     ],
     module: {

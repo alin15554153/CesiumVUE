@@ -1,7 +1,7 @@
 <template>
   <div  id="dialogCom">
     <div @mousedown="mousedown" id='dialogHandle'>
-          <a id = 'dialogClose' title='关闭' class='btn btn-inverse'><span class='el-icon-close' style="border: #2c3e50 2px" @click="closeMyself"></span></a>
+          <a id = 'dialogClose' title='关闭' class='btn'><span class='el-icon-close' style="border: #2c3e50 2px" @click="closeMyself"></span></a>
     </div>
     <div id='dialogContainer'>
       <slot>empty</slot>

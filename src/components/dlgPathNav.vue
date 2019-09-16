@@ -128,13 +128,14 @@
       },
       ViewType(event){
         console.log(event)
-        if ( event.path[0].className =="el-icon-s-unfold"){
-          event.path[0].className="el-icon-menu"
-        }else {
-          event.path[0].className="el-icon-s-unfold"
+        if(event.path[0].tagName==='I') {
+          if (event.path[0].className == "el-icon-s-unfold") {
+            event.path[0].className = "el-icon-menu"
+          } else {
+            event.path[0].className = "el-icon-s-unfold"
+          }
         }
-
-        alert('请完其它')
+        // alert('请完其它Q')
       }
     }
   }
@@ -142,55 +143,7 @@
 </script>
 
 <style>
-  .picdiv{
-    float: left;
-    margin: 10px 0px 0px 10px;
-  }
 
-  .picdiv img{
-    width: 88px;
-    height: 88px;
-    border:2px solid #2EC5AD;
-  }
-  .picdiv img:hover{
-    border:2px solid #409EFF;
-
-  }
-  .pictext{
-    text-align:center;
-    color: #2EC5AD;
-  }
-  .pictext:hover{
-    color: #409EFF;
-  }
-
-  #dlgPathNav .el-collapse-item__header {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    height: 38px;
-    line-height: 48px;
-    background-color: rgba(239, 255, 244, 0);
-    color: #2EC5AD;
-    cursor: pointer;
-    border-bottom: 2px solid #2ec5ad;
-    font-size: 13px;
-    font-weight: 500;
-    -webkit-transition: border-bottom-color .3s;
-    transition: border-bottom-color .3s;
-    outline: 0;
-  }
-  #dlgPathNav .el-collapse-item__wrap {
-    will-change: height;
-    background-color: rgba(255, 255, 255, 0);
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    border-bottom: 1px solid #2ec5ad;
-  }
 
   #dlgPathNav .el-tabs__header {
     padding: 0;
@@ -258,7 +211,7 @@
     -webkit-transition: .1s;
     transition: .1s;
     font-weight: 500;
-    padding: 8px 4px;
+    padding: 0px 0px;
     font-size: 18px;
     border-radius: 4px;
   }
@@ -268,7 +221,9 @@
     color: #e5e1e1;
     background : #2c3e50;
   }
-
+  #dlgPathNav .el-button i{
+    padding: 8px 6px;
+  }
   #dlgPathNav .el-main {
     display: block;
     -webkit-box-flex: 1;
@@ -283,6 +238,56 @@
     height: 400px;
     width: 320px;
     background : rgba(255, 255, 255, 0);
+  }
+
+  #dlgPathNav .el-collapse-item__header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 38px;
+    line-height: 48px;
+    background-color: rgba(239, 255, 244, 0);
+    color: #2EC5AD;
+    cursor: pointer;
+    border-bottom: 2px solid #2ec5ad;
+    font-size: 13px;
+    font-weight: 500;
+    -webkit-transition: border-bottom-color .3s;
+    transition: border-bottom-color .3s;
+    outline: 0;
+  }
+  #dlgPathNav .el-collapse-item__wrap {
+    will-change: height;
+    background-color: rgba(255, 255, 255, 0);
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #2ec5ad;
+  }
+
+  #dlgPathNav .picdiv{
+    float: left;
+    margin: 10px 0px 0px 10px;
+  }
+
+  #dlgPathNav .picdiv img{
+    width: 88px;
+    height: 88px;
+    border:2px solid #2EC5AD;
+  }
+  #dlgPathNav .picdiv img:hover{
+    border:2px solid #409EFF;
+
+  }
+  #dlgPathNav .pictext{
+    text-align:center;
+    color: #2EC5AD;
+  }
+  #dlgPathNav .pictext:hover{
+    color: #409EFF;
   }
 
 </style>
