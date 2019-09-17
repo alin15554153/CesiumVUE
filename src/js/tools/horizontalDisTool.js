@@ -179,7 +179,19 @@ HorizontalDisTool.prototype.createLabel = function (index) {
     }
 
 HorizontalDisTool.prototype.getDistance = function (){
-        var length = this._positions.length;
+  var length = this._positions.length;
+  if (length < 2) return 0;
+  var _mDistance = 0;
+  var geodesic = new Cesium.EllipsoidGeodesic();
+  for (var i = 0; i < length - 1; ++i){
+    var startcartographic = Cesium.Cartographic.fromCartesian(this._positions[i]);
+    var endcartographic = Cesium.Cartographic.fromCartesian(this._positions[i + 1]);
+    geodesic.setEndPoints(startcartographic, endcartographic);
+    _mDistance += geodesic.surfaceDistance;
+  }
+
+  return _mDistance;
+        /*var length = this._positions.length;
         if (length < 2) return 0;
         var _mDistance = 0;
         var _mRadius = 6378137;
@@ -190,7 +202,7 @@ HorizontalDisTool.prototype.getDistance = function (){
               Math.cos(longlaal0.latitude) * Math.cos(longlaal1.latitude) * Math.cos(longlaal1.longitude - longlaal0.longitude));
         }
 
-        return _mDistance;
+        return _mDistance;*/
 
       /*var mDistance = {
             distance2D : 0,

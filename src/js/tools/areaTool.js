@@ -160,16 +160,51 @@ AreaTool.prototype.clear = function () {
 
     AreaTool.prototype.getArea = function () {
         var s = 0;
-        for (var i = 0; i < this._positions.length; i++) {
-            var p1 = this._positions[i];
-            var p2;
-            if (i < this._positions.length - 1)
-                p2 = this._positions[i + 1];
-            else
-                p2 = this._positions[0];
-            s += p1.x * p2.y - p2.x * p1.y;
+        var length = this._positions.length;
+        for (var i = 0; i < length - 2; i++) {
+          var j = (i + 1) % length;
+          var k = (i + 2) % length;
+
+          var totalAngle = getAngle(this._positions[0], this._positions[j], this._positions[k]);
+
+          var dis_temp1 = getDistance(this._positions[0], this._positions[j]);
+          var dis_temp2 = getDistance(this._positions[j], this._positions[k]);
+          s += dis_temp1 * dis_temp2 * Math.sin(totalAngle) / 2.0;
         }
-        return Math.abs(s / 2);
+        return Math.abs(s);
+    }
+    /*角度*/
+    function getAngle(p1, p2, p3) {
+      var cartographic1 = Cesium.Cartographic.fromCartesian(p1);
+      var cartographic2 = Cesium.Cartographic.fromCartesian(p2);
+      var cartographic3 = Cesium.Cartographic.fromCartesian(p3);
+
+      var bearing21 = Bearing(cartographic2, cartographic1);
+      var bearing23 = Bearing(cartographic2, cartographic3);
+      var angle = bearing21 - bearing23;
+      if (angle < 0) {
+        angle += Math.PI * 2.0;
+      }
+      return angle;
+    }
+    /*方向*/
+    function Bearing(from, to) {
+      var angle = -Math.atan2(Math.sin(from.longitude - to.longitude) * Math.cos(to.latitude),
+        Math.cos(from.latitude) * Math.sin(to.latitude) - Math.sin(from.latitude) * Math.cos(to.latitude) * Math.cos(from.longitude - to.longitude));
+      if (angle < 0) {
+        angle += Math.PI * 2.0;
+      }
+      return angle;
+    }
+    function getDistance(point1,point2){
+        var startcartographic = Cesium.Cartographic.fromCartesian(point1);
+        var endcartographic = Cesium.Cartographic.fromCartesian(point2);
+        /**根据经纬度计算出距离**/
+        var geodesic = new Cesium.EllipsoidGeodesic();
+        geodesic.setEndPoints(startcartographic, endcartographic);
+        var s = geodesic.surfaceDistance;
+        s = Math.sqrt(Math.pow(s, 2) + Math.pow(endcartographic.height - startcartographic.height, 2));
+        return s;
     }
 
 export default   AreaTool;

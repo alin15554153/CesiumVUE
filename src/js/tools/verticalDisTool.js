@@ -232,21 +232,27 @@ VertivalDisTool.prototype.getTips = function (){
   }
   if (this._positions.length < 2)  return '';
 
-  var _mRadius = 6378137;
+ /* var _mRadius = 6378137;
   var longlaal0 = this._viewer.scene.globe.ellipsoid.cartesianToCartographic(this._positions[0]);
   var longlaal1 = this._viewer.scene.globe.ellipsoid.cartesianToCartographic(this._positions[1]);
 
   Distance.vertical = _mRadius * Math.acos(Math.sin(longlaal0.latitude) * Math.sin(longlaal1.latitude) +
       Math.cos(longlaal0.latitude) * Math.cos(longlaal1.latitude) * Math.cos(longlaal1.longitude - longlaal0.longitude));
 
-  Distance.spatial = Cesium.Cartesian3.distance(this._positions[0], this._positions[1]);
+  Distance.spatial = Cesium.Cartesian3.distance(this._positions[0], this._positions[1]);*/
+  var startcartographic = Cesium.Cartographic.fromCartesian(this._positions[0]);
+  var endcartographic = Cesium.Cartographic.fromCartesian(this._positions[1]);
+  /**根据经纬度计算出距离**/
+  var geodesic = new Cesium.EllipsoidGeodesic();
+  geodesic.setEndPoints(startcartographic, endcartographic);
+  Distance.horizontal = geodesic.surfaceDistance;
+  Distance.spatial = Math.sqrt(Math.pow(Distance.horizontal, 2) + Math.pow(endcartographic.height - startcartographic.height, 2));
+  Distance.vertical = Math.abs(startcartographic.height - endcartographic.height)
 
-  Distance.horizontal = Math.abs(longlaal1.height - longlaal0.height)
-
-  return '水平距离：' + (Distance.vertical < 1000 ? Distance.vertical.toFixed(3) + '米' :
-    (Distance.vertical / 1000.0 ).toFixed(6) + '千米')
-  + '\n垂直距离：' + (Distance.horizontal < 1000 ? Distance.horizontal.toFixed(3) + '米' :
+  return '水平距离：' + (Distance.horizontal < 1000 ? Distance.horizontal.toFixed(3) + '米' :
     (Distance.horizontal / 1000.0 ).toFixed(6) + '千米')
+  + '\n垂直距离：' + (Distance.vertical < 1000 ? Distance.vertical.toFixed(3) + '米' :
+    (Distance.vertical / 1000.0 ).toFixed(6) + '千米')
   + '\n空间距离：' + (Distance.spatial < 1000 ? Distance.spatial.toFixed(3) + '米' :
     (Distance.spatial / 1000.0 ).toFixed(6) + '千米');
 }
