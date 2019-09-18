@@ -114,7 +114,6 @@ export default {
       }
     },
     onBaseLayerBtnClk (name) {
-      debugger
       this.$store.commit('setBaseLayerGroupPageName',name)
       this.$parent.$data.isShowBaseLayer = true//显示底图面板
     },

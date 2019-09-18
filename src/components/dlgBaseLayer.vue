@@ -3,34 +3,11 @@
     <el-tab-pane label="公用服务" name="first">
 
         <el-collapse v-model="activeName2" accordion>
-          <el-collapse-item title="影像地图" name="1">
-            <div class="picdiv">
-              <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" @click="showBingRoadMap" alt="">
-              <p class="pictext">Bing</p>
+          <el-collapse-item v-bind:title = "item.groupName"   v-bind:name="index" v-for="(item,index) in doms" v-bind:key="item.id">
+            <div class="picdiv" v-for="item2 in item.group">
+              <img v-bind:src="require(`../${item2.image}`)" alt="" @click="changeImageryProvider(item2.providerName,item2.options)" />
+              <p class="pictext">{{item2.name}}</p>
             </div>
-            <div class="picdiv">
-              <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-              <p class="pictext">Bing</p>
-            </div>
-            <div class="picdiv">
-              <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
-              <p class="pictext">Bing</p>
-            </div>
-          </el-collapse-item>
-          <el-collapse-item title="电子地图" name="2">
-            <div class="picdiv">
-              <img src="../assets/images/model/car1.jpg" alt="">
-              <p class="pictext">Bing</p>
-            </div>
-            <div class="picdiv">
-              <img src="../assets/images/model/car2.jpg" alt="">
-              <p class="pictext">Bing</p>
-            </div>
-            <div class="picdiv">
-              <img src="../assets/images/model/car3.jpg" alt="">
-              <p class="pictext">Bing</p>
-            </div>
-
           </el-collapse-item>
         </el-collapse>
 
@@ -41,7 +18,16 @@
         <el-button slot="append">确认</el-button>
       </el-input>
     </el-tab-pane>
-    <el-tab-pane label="地形" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="地形" name="third">
+      <el-collapse v-model="activeName2" accordion>
+        <el-collapse-item v-bind:title = "item.groupName"   v-bind:name="index" v-for="(item,index) in dems" v-bind:key="item.id">
+          <div class="picdiv" v-for="item2 in item.group">
+            <img v-bind:src="require(`../${item2.image}`)" alt="" @click="changeTerrainProvider(item2.providerName,item2.options)" />
+            <p class="pictext">{{item2.name}}</p>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -63,6 +49,8 @@
         selectElement: '',
         activeName: 'first',
         activeName2: '1',
+        doms:[],
+        dems:[]
       }
     },
 
@@ -76,7 +64,27 @@
         this.activeName = this.$store.state.baseLayerGroupPageName;
       }
     },
+    mounted () {
+      let url =  require('../assets/doms.json');
+      this.doms = url.doms;
 
+      url =  require('../assets/dems.json');
+      this.dems = url.dems;
+      /*debugger
+      var domlayer = $("#domLayer");
+      if (domlayer == null) return;
+      domlayer.html('');
+      this.$data.doms.forEach(function(currentValue, index, arr){
+        var _mItemli = "<div class='picdiv'>" +
+          "<img src= '" + currentValue.image + "' @click='showBingRoadMap' alt=''>" +
+          "<p class='pictext'>" + currentValue.name + "</p>" +
+          "</div>";
+
+        var _mElement= $(_mItemli);
+        _mElement.data('data', currentValue);
+        var _mui = domlayer.append(_mElement);
+      });*/
+    },
     methods: {
       /** 切换tab */
       handleClick (tab, event) {
@@ -98,6 +106,33 @@
         })
         viewer.imageryLayers.addImageryProvider(shadedRelief1)
       },
+      changeImageryProvider(providerName, options){
+        let newoptions = {};
+        for (var i in options){
+            if (typeof(options[i]) == 'string'  && options[i].substring(0, 4) == 'new ')
+              newoptions[i] = eval(options[i]);
+            else
+              newoptions[i] = options[i];
+        }
+        let _mProvider = eval('new ' + providerName + '(newoptions)');
+        this.viewer.imageryLayers.removeAll();
+        this.viewer.imageryLayers.addImageryProvider(_mProvider);
+      },
+      changeTerrainProvider(providerName, options){
+        let newoptions = {};
+        for (var i in options){
+          if (typeof(options[i]) == 'string' && (options[i].substring(0, 4) == 'new ' || options[i].substring(0, 7) == 'Cesium.') )
+            newoptions[i] = eval(options[i]);
+          else
+            newoptions[i] = options[i];
+        }
+
+        this.viewer.terrainProvider = eval('new ' + providerName + '(newoptions)');
+      },
+      loadByUrl(image){
+        let name = 'assets/images/mapboxSatellite.png';
+        return require(`../${image}`);
+      }
     }
   }
 </script>
@@ -141,6 +176,7 @@
   /*tab组面板*/
   #dlgBaseLayer .el-tab-pane {
     /*height: 398px;*/
+    width:320px;
     background-color: rgba(38, 38, 38, 0.7);
   }
 
@@ -208,7 +244,9 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
     width: 100%;
   }
-
-
-
+  #dlgBaseLayer .pictext{
+    width:88px;
+    word-break:break-all;
+    word-wrap:break-word ;
+  }
 </style>

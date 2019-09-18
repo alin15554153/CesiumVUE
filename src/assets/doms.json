@@ -1,0 +1,127 @@
+{
+  "doms":[
+    {"groupName": "影像地图",
+      "group":[
+        {
+          "name" : "MapBoxSatellite",
+          "image" : "assets/images/mapboxSatellite.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.MapboxImageryProvider",
+          "options" : {
+            "mapId" : "mapbox.satellite"
+          }
+        },
+        {
+          "name" : "MapBoxStreets",
+          "image" : "assets/images/mapboxTerrain.png",
+          "imgSrc" :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.MapboxImageryProvider",
+          "options" : {
+            "mapId": "mapbox.streets"
+          }
+        },
+        {
+          "name" : "ArcGisWordMap",
+          "image" : "assets/images/esriWorldImagery.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.ArcGisMapServerImageryProvider",
+          "options" : {
+          "url" : "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+          "enablePickFeatures" : false
+        }
+      },
+        {
+          "name" : "天地图",
+          "image" : "assets/images/tdt.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.WebMapTileServiceImageryProvider",
+          "options" : {
+            "url": "http://t0.tianditu.gov.cn/img_c/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&style=default&tileMatrixSet=c&format=tiles&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&tk=9ddfee9f7c9363dd73325b3ce8af011e",
+            "layer": "tdtBasicLayer",
+            "style": "default",
+            "format": "tiles",
+            "tileMatrixSetID": "c",
+            "credit" : "new Cesium.Credit('天地图全球影响服务')",
+            "tilingScheme" : "new Cesium.GeographicTilingScheme",
+            "tileMatrixLabels" : ["1", "2", "3", "4", "5", "6", "7"]
+          }
+        },
+        {
+          "name" : "GoogleEarthLocal",
+          "image" : "assets/images/tdt.png",
+          "imgSrc" :"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.UrlTemplateImageryProvider",
+          "options" : {
+          "url": "./Data/DOM/{z}/{y}/{x}.png",
+          "tilingScheme": "new Cesium.GeographicTilingScheme()",
+          "fileExtension": "png",
+          "minimumLevel": 1,
+          "maximumLevel": 14
+          }
+        }
+      ]
+    },
+    {"groupName": "电子地图",
+      "group":[
+        {
+          "name" : "Mapbox.Streets-basic",
+          "image" : "assets/images/mapboxStreets.png",
+          "imgSrc": "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName": "Cesium.MapboxImageryProvider",
+          "options" : {
+            "mapId": "mapbox.streets-basic"
+          }
+        },
+        {
+          "name" : "ArcGisStreetMap",
+          "image" : "assets/images/esriWorldStreetMap.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName": "Cesium.ArcGisMapServerImageryProvider",
+          "options" : {
+            "url" : "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer",
+            "enablePickFeatures" : false
+          }
+        },
+        {
+          "name" : "ArcGisNatGeoMap",
+          "image" : "assets/images/esriNationalGeographic.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName": "Cesium.ArcGisMapServerImageryProvider",
+          "options" : {
+            "url" : "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/",
+            "enablePickFeatures" : false
+          }
+        },
+        {
+          "name" : "OSMap",
+          "image" : "assets/images/openStreetMap.png",
+          "imgSrc":"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.createOpenStreetMapImageryProvider",
+          "options" : {
+            "url" : "https://a.tile.openstreetmap.org/"
+          }
+        },
+        {
+          "name" : "OSWaterMap",
+          "image" : "assets/images/stamenWatercolor.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.createOpenStreetMapImageryProvider",
+          "options" : {
+            "url" : "https://stamen-tiles.a.ssl.fastly.net/watercolor/",
+            "credit" : "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA."
+          }
+        },
+        {
+          "name" : "OSTonerMap",
+          "image" : "assets/images/stamenToner.png",
+          "imgSrc" : "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          "providerName" : "Cesium.createOpenStreetMapImageryProvider",
+          "options" : {
+            "url" : "https://stamen-tiles.a.ssl.fastly.net/watercolor/",
+            "credit" : "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA."
+          }
+        }
+      ]
+    }
+  ]
+}
