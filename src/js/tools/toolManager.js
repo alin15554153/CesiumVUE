@@ -40,7 +40,6 @@ ToolManager.prototype.measureVerticalDis = function (onCreate) {
 
 ToolManager.prototype.measureArea = function (onCreate) {
   this.clear();
-  debugger
   var Tool = new AreaTool(this._viewer, onCreate);
   this._toolArray.push(Tool);
 }

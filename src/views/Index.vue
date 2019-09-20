@@ -42,6 +42,7 @@ import dlgSplitScreen from '../components/dlgSplitScreen'
 
 import testChild from '../components/test_child'
 import ToolManager from '../js/tools/toolManager'
+import CesiumNavigation from "cesium-navigation-es6";
 
 export default {
   components: {
@@ -114,9 +115,28 @@ export default {
       Vue.prototype.viewer = viewer
       Vue.prototype.viewer.ToolManager = new ToolManager(viewer);
 
+      /*var options = {};
+      options.defaultResetView = Cesium.Rectangle.fromDegrees(73, 3, 135, 53);
+      // Only the compass will show on the map
+      options.enableCompass= true;
+      options.enableZoomControls= true;
+      options.enableDistanceLegend= true;
+      options.enableCompassOuterRing= true;
+      viewer.extend(viewerCesiumNavigationMixin, options);*/
 
+      let options = {};
+      options.defaultResetView = Cesium.Rectangle.fromDegrees(73, 3, 135, 53);
+      options.enableCompass= true;
+      options.enableZoomControls= true;
+      options.enableDistanceLegend= true;
+      options.enableCompassOuterRing= true;
+      CesiumNavigation(viewer, options);
 
-
+      viewer.scene.globe.depthTestAgainstTerrain=true;
+      viewer.scene.globe.undergroundModel=true;
+      /* _mViewer.scene.screenSpaceCameraController.minimumZoomDistance=-500;*/
+      viewer.scene.globe.showUndergroundGrid=true;
+      viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
 
       this.viewer.camera.changed.addEventListener(this.sync2DView);
       let _drawHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);

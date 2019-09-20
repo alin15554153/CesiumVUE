@@ -7,11 +7,11 @@ BaseTool.prototype.pick = function (screenPoint) {
     if (!Cesium.defined(screenPoint)) {
         return;
     }
-
+  /*&& pickedObject.id &&
+        (!Cesium.defined(pickedObject.id.layerId) || pickedObject.id.layerId != 'Measure')*/
     var pickedObject = this._viewer.scene.pick(screenPoint);
     if (this._viewer.scene.mode !== Cesium.SceneMode.MORPHING &&
-        this._viewer.scene.pickPositionSupported && Cesium.defined(pickedObject) && pickedObject.id &&
-      (!Cesium.defined(pickedObject.id.layerId) || pickedObject.id.layerId != 'Measure')) {
+        this._viewer.scene.pickPositionSupported && Cesium.defined(pickedObject)) {
         return this._viewer.scene.pickPosition(screenPoint);
     }
     else{

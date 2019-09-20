@@ -165,7 +165,7 @@ HorizontalDisTool.prototype.createLabel = function (index) {
           backgroundColor: new Cesium.Color(0.165, 0.165, 0.165, 0.5),
           backgroundPadding:new Cesium.Cartesian2(7, 5),
           scale:1.0,
-          horizontalOrigin : Cesium.HorizontalOrigin.BOTTON,
+          horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
           verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
           eyeOffset : Cesium.Cartesian3.ZERO,
           pixelOffset : new Cesium.Cartesian2(0, -10),

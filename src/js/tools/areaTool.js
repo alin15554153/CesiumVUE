@@ -129,7 +129,7 @@ AreaTool.prototype.clear = function () {
             backgroundColor: new Cesium.Color(0.165, 0.165, 0.165, 0.5),
             backgroundPadding:new Cesium.Cartesian2(7, 5),
             scale:1.0,
-            horizontalOrigin : Cesium.HorizontalOrigin.BOTTON,
+            horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
             verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
             eyeOffset : Cesium.Cartesian3.ZERO,
             pixelOffset : new Cesium.Cartesian2(0, -10),
@@ -153,7 +153,14 @@ AreaTool.prototype.clear = function () {
         billboard: {
           image: require('../../assets/images/drag.png'),
           //eyeOffset: new Cesium.ConstantProperty(new Cesium.Cartesian3(0, 0, -500)),
-          heightReference: Cesium.HeightReference.NONE
+          show : true,
+          pixelOffset : new Cesium.ConstantProperty(new Cesium.Cartesian3(0, 0, -500)),
+          eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
+          horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
+          verticalOrigin : Cesium.VerticalOrigin.CENTER,
+          scale : 1.0,
+          color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
+
         }
       });
     }
