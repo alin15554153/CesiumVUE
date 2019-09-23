@@ -14,14 +14,14 @@
 </template>
 
 <script>
-
+  import LineDynamicMaterial from '../js/materials/LineDynamicMaterial'
+  import CircleDynamicMaterial from '../js/materials/CircleDynamicMaterial'
   export default {
     name: 'toolBarMeasur',
     methods:{
       measurePoint(){
         if (this.viewer){
           this.viewer.ToolManager.measurePoint(function () {
-
           });
         }
 
@@ -44,6 +44,30 @@
         },Cesium.ScreenSpaceEventType.LEFT_CLICK);*/
       },
       measureHorizontalDis(){
+        //线型动态纹理
+        /*var entity2 = this.viewer.entities.add({
+          name: 'LineDynamicMaterial',
+          polyline: {
+            positions: Cesium.Cartesian3.fromDegreesArrayHeights([128, 42, 2500,
+              128 + 10, 42, 2500,
+              128 + 10, 42 + 10, 2500, ]),
+            width: 15,
+            material: new Cesium.LineDynamicMaterial(Cesium.Color.ORANGE, 3000)
+          }
+        });
+        var entity = this.viewer.entities.add({
+          name: 'CircleDynamicMaterial',
+          position: Cesium.Cartesian3.fromDegrees(128, 42, 3000),
+          ellipse: {
+            height:0,
+            semiMinorAxis:150000,
+            semiMajorAxis:150000,
+            material: new Cesium.CircleDynamicMaterial(Cesium.Color.ORANGE, 3000),
+            clampToGround: true,
+          }
+        });
+        return;*/
+
         if (this.viewer){
           this.viewer.ToolManager.measureHorizontalDis(function () {
           });

@@ -33,7 +33,7 @@ module.exports = {
       alias: {
         'vue$': 'vue/dist/vue.esm.js',
         '@': path.resolve('src'),
-        'cesium': path.resolve(__dirname, cesiumSource)
+        'cesium': path.resolve(__dirname, cesiumSource),
       }
     },
 
