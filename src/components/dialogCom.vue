@@ -52,8 +52,6 @@ export default {
   #dialogCom{
     position: absolute;
     background-color: rgba(38, 38, 38, 0.75);
-    top:100px;
-    left: 600px;
     z-index: 3;
   }
   /***/

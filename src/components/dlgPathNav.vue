@@ -1,31 +1,82 @@
 <template>
-  <el-tabs id='dlgPathNav' v-model="activeName" @tab-click="handleClick">
+  <el-tabs id='dlgPathNav' v-model="activeTapName" @tab-click="onTabClick">
     <el-tab-pane label="特定场景" name="first">
       <el-container>
-        <el-header height = '40px'>
+        <el-header height='40px'>
           <el-row>
-            <el-button  type="text" title="添加分组"  icon="el-icon-folder" @click="addGroup"></el-button>
-            <el-button  type="text" title="删除分组"  icon="el-icon-delete-solid" @click="delGroup"></el-button>
-            <el-button  type="text" title="编辑分组"  icon="el-icon-edit-outline" @click="editGroup"></el-button>
+            <el-button type="text" title="添加" icon="el-icon-plus" @click="onCamAddOpen"></el-button>
+            <el-button type="text" title="删除当前场景" icon="el-icon-delete-solid" @click="onCamDel"></el-button>
+            <el-button type="text" title="替换" icon="el-icon-connection" @click="onCamReplace"></el-button>
+            <el-button type="text" title="修改当前" icon="el-icon-edit" @click="isShowDlgCamEdit = true"></el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button  type="text" title="添加"  icon="el-icon-plus" @click="addView"></el-button>
-            <el-button  type="text" title="删除" icon="el-icon-delete-solid" @click="delView"></el-button>
-            <el-button  type="text" title="替换" icon="el-icon-connection" @click="replaceView"></el-button>
-            <el-button  type="text" title="修改" icon="el-icon-edit" @click="editView"></el-button>
+            <el-button type="text" title="添加分组" icon="el-icon-folder-add" @click="onCamGroupAdd"></el-button>
+            <el-button type="text" title="删除当前分组" icon="el-icon-folder-remove" @click="onCamGroupDel"></el-button>
+            <el-button type="text" title="编辑当前分组" icon="el-icon-edit-outline" @click="onCamGroupEdit"></el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button  type="text" title="导出"  icon="el-icon-download" @click="savePoint"></el-button>
-            <el-button  type="text" title="缩略图显示"  icon="el-icon-menu" @click="ViewType"></el-button>
+
+            <el-button type="text" title="导出" icon="el-icon-download" @click="onCamDataArrSave"></el-button>
+            <el-button type="text" title="读取" icon="el-icon-folder-opened" @click="isShowDlgCamLoad= true"></el-button>
+            <el-divider direction="vertical"></el-divider>
+            <!--            <el-button  type="text" title="缩略图显示"  icon="el-icon-menu" @click="ViewType"></el-button>-->
+            <el-button type="text" title="播放" icon="el-icon-video-play" @click="onCamGroupPlay"></el-button>
+            <el-button type="text" title="暂停" icon="el-icon-video-pause" @click="onCamGroupPlayPause"></el-button>
           </el-row>
         </el-header>
-        <el-main>
-          <el-collapse v-model="activeName2" accordion>
+        <el-dialog :visible.sync="isShowDlgCamAdd" width=300px :append-to-body=true :destroy-on-close=true>
+          <el-form :model="camInfo">
+            <el-form-item label="特定场景名称" label-width="120">
+              <el-input v-model="camInfo.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="特定场景时间" label-width="120">
+              <el-input-number v-model="camInfo.time" controls-position="right" :min="1" :max="10"></el-input-number>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="isShowDlgCamAdd = false">取 消</el-button>
+            <el-button type="primary" @click="camAdd">确 定</el-button>
+          </div>
+        </el-dialog>
 
-              <el-collapse-item v-bind:title = "item.groupName"   v-bind:name="index" v-for="(item,index) in camPointData" v-bind:key="item.id">
-                <div class="picdiv" v-for="item2 in item.group">
-                  <img v-bind:src="item2.imgSrc" alt="" @click="flyToPoint(item2.x,item2.y,item2.z,item2.heading,item2.pitch,item2.roll,item2.time)" />
-                  <p class="pictext">{{item2.name}}</p>
-                </div>
-              </el-collapse-item>
+        <el-dialog :visible.sync="isShowDlgCamEdit" width=300px :append-to-body=true :destroy-on-close=true>
+          <el-form :model="camInfo">
+            <el-form-item label="特定场景名称" label-width="120">
+              <el-input v-model="camInfo.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="特定场景时间" label-width="120">
+              <el-input-number v-model="camInfo.time" controls-position="right" :min="1" :max="10"></el-input-number>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="isShowDlgCamEdit = false">取 消</el-button>
+            <el-button type="primary" @click="camEdit">修 改</el-button>
+          </div>
+        </el-dialog>
+
+        <el-dialog :visible.sync="isShowDlgCamLoad" width=300px :append-to-body=true :destroy-on-close=true>
+          <input type="file" ref="filElem" class="upload-file" @change="onCamDataArrLoad">
+          <div slot="footer" class="dialog-footer">
+            <!--            <el-button type="primary" @click="isShowDlgCamLoad = false">确 定</el-button>-->
+          </div>
+        </el-dialog>
+
+        <el-main>
+          <el-collapse v-model="camGroupName" accordion @change="onCamChange">
+            <el-collapse-item v-for="(camGroup,camGroupIndex) in camDataArr"
+                              :key="camGroup.id"
+                              :title="camGroup.camGroupName"
+                              :name="camGroup.camGroupName">
+
+              <div class="camDiv"
+                   v-for="(camInfo,camIndex) in camGroup.group">
+
+                <img  class='camImg'
+                      :src="camInfo.img"
+                      :ref="`camGroup${camGroupIndex}`+`cam${camIndex}`"
+                      alt=""
+                     @click="onCamImg(camInfo,camGroupIndex,camIndex)"/>
+                <p class="pictext">{{camInfo.name +':' + camInfo.time +'秒'}}</p>
+              </div>
+            </el-collapse-item>
 
           </el-collapse>
         </el-main>
@@ -33,11 +84,11 @@
     </el-tab-pane>
     <el-tab-pane label="动画导航" name="second">
       <el-container>
-        <el-header height = '40px'>
+        <el-header height='40px'>
           <el-row>
-            <el-button  type="text"  icon="el-icon-plus"></el-button>
-            <el-button  type="text"  icon="el-icon-delete-solid"></el-button>
-            <el-button  type="text"  icon="el-icon-edit" ></el-button>
+            <el-button type="text" icon="el-icon-plus"></el-button>
+            <el-button type="text" icon="el-icon-delete-solid"></el-button>
+            <el-button type="text" icon="el-icon-edit"></el-button>
           </el-row>
         </el-header>
         <el-main>Main</el-main>
@@ -45,269 +96,340 @@
     </el-tab-pane>
   </el-tabs>
 
+
 </template>
 
 <script>
+  // import
+  var FileSaver = require('file-saver')
+  import html2canvas from 'html2canvas'
+
   export default {
     data () {
       return {
-        camPointData:{},
-        selectElement: '',
-        activeName: 'first',
-        activeName2: '1',
-        src:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+        urlUpload: '',
+        camDataArr: [],
+        activeTapName: 'first',
+        camGroupName: '特定场景组1',
+        camGroupIndex:0,
+        activeCamIndex: -1,
+
+        isFly :true,
+        isShowDlgCamAdd: false,
+        isShowDlgCamEdit: false,
+        isShowDlgCamLoad: false,
+        isShowDlgcamGroupAdd: false,
+
+        camInfo: {
+          // id:'',
+          // index:0,
+          name: '特定场景0',
+          img: '',
+          log:0.0,
+          lat:0.0,
+          alt:0.0,
+          pitch:0.0,
+          roll:0.0,
+          time: 1,
+        },
+        lastCamImgDom:undefined,
+
       }
     },
     mounted () {
-      let url =  require('../assets/pro2.json')
-      this.camPointData = url.camPointArr
     },
 
-    computed:{
-      listensPage(){
-        return this.$store.state.dlgPathNavPageName;
-      }
-    },
-    watch: {
-      listensPage: function() {
-        this.activeName = this.$store.state.dlgPathNavPageName;
-      }
-    },
     methods: {
-      getCamPos(){
-        let position = this.viewer.scene.camera.positionWC;
-
-        let cartographic= this.viewer.scene.globe.ellipsoid.cartesianToCartographic(position);
-        //将地图坐标（弧度）转为十进制的度数
-        let lat_String=Cesium.Math.toDegrees(cartographic.latitude).toFixed(6);
-        let log_String=Cesium.Math.toDegrees(cartographic.longitude).toFixed(6);
-        let alt_String=(this.viewer.camera.positionCartographic.height/1000).toFixed(2);
-
-        let heading = this.viewer.scene.camera.heading;
-        let pitch = this.viewer.scene.camera.pitch;
-        let roll = this.viewer.scene.camera.roll;
-        return {x:log_String,y:lat_String,z:alt_String}
+      /** 切换tab */
+      onTabClick (tab, event) {
+        // paneName
+        // console.log(tab, event)
       },
-      addView(){
-          console.log(this.camPointData)
+      /** 场景组切换折叠通知所有操作基于场景数据中哪个场景组 */
+      onCamChange (collapse) {
+        this.camGroupIndex = this.camDataArr.findIndex(item => item.camGroupName === this.camGroupName)
       },
-      flyToPoint(lon, lat, height,heading, pitch,roll,duration){
-        this.viewer.camera.flyTo({
-          destination : Cesium.Cartesian3.fromDegrees(lon, lat, height),
-          orientation : {
-            heading : Cesium.Math.toRadians(heading),
-            pitch : Cesium.Math.toRadians( pitch),
-            roll : roll
-          },
-          duration:duration
-        });
-      },
-      setView (lon, lat, height) {
-        this.viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(lon, lat, height), // 设置位置
-          orientation: {
-            heading: Cesium.Math.toRadians(0.0), // 方向
-            pitch: Cesium.Math.toRadians(-90.0), // 倾斜角度
-            roll: 0
-          }
+      /**场景组新建*/
+      onCamGroupAdd () {
+        this.$prompt('请输入特定场景组名称', '提示', {
+          inputValue:'特定场景组'+this.camDataArr.length,
+          cancelButtonText: '取消',
+          confirmButtonText: '确定',
+        }).then(({ value }) => {
+          this.camGroupName = value
+          this.camDataArr.push({ 'camGroupName': value, 'group': [] })
+          this.onCamChange()
+          this.$message({
+            type: 'success',
+            message: '你的定场景组名称是: ' + value
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
         })
       },
-      //保存相机点
-      savePoint(){
-        var FileSaver = require('file-saver');
-        let data = {
-          name:"hanmeimei",
-          age:88
+      /**场景组删除*/
+      onCamGroupDel () {
+        this.$confirm('此操作将永久删除该组, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.camDataArr.splice(this.camGroupIndex, 1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      },
+      /**场景组重命名*/
+      onCamGroupEdit () {
+        let that = this
+        this.$prompt('请输入特定场景组名称', '提示', {
+          inputValue:'特定场景组'+this.camGroupIndex,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({ value }) => {
+
+          that.camDataArr[this.camGroupIndex].camGroupName = value
+          this.camGroupName = value
+          this.$message({
+            type: 'success',
+            message: '你的定场景组名称是: ' + value
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
+      },
+      /**获取当前相机姿态*/
+      getCamPos () {
+        let position = this.viewer.scene.camera.positionWC
+        let cartographic = this.viewer.scene.globe.ellipsoid.cartesianToCartographic(position)
+        //将地图坐标（弧度）转为十进制的度数
+        this.camInfo.lat = Cesium.Math.toDegrees(cartographic.latitude)
+        this.camInfo.log = Cesium.Math.toDegrees(cartographic.longitude)
+        this.camInfo.alt = (this.viewer.camera.positionCartographic.height)
+
+        this.camInfo.heading = this.viewer.scene.camera.heading
+        this.camInfo.pitch = this.viewer.scene.camera.pitch
+        this.camInfo.roll = this.viewer.scene.camera.roll
+      },
+      /**弹出对话框添写特定场景名称和时间*/
+      onCamAddOpen () {
+        this.isShowDlgCamAdd = true
+        var canvas = this.viewer.scene.canvas
+        window.pageYOffset = 0
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+        this.camInfo.name = '特定场景' + this.camDataArr[this.camGroupIndex].group.length
+        html2canvas(canvas, { scale: 0.05 }).then((canvas) => {
+          let img = canvas.toDataURL('image/png')
+          this.camInfo.img = img
+        })
+      },
+      /**添加特定场景*/
+      camAdd () {
+        this.isShowDlgCamAdd = false
+        // this.camInfo.id = this.camGroupName + this.camInfo.name + this.activeCamIndex
+        this.getCamPos()
+        var copy = JSON.parse(JSON.stringify(this.camInfo)) //深copy
+        let index = this.camDataArr[this.camGroupIndex].group.length
+        if(this.activeCamIndex===index-1){
+          this.camDataArr[this.camGroupIndex].group.push(copy)
+          this.camImgHighlight(this.camGroupIndex,index)
+        }else {
+          this.camDataArr[this.camGroupIndex].group.splice(this.activeCamIndex+1,0,copy)
+          this.camImgHighlight(this.camGroupIndex,this.activeCamIndex+1)
         }
-        var content = JSON.stringify(data);
-        var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
-        FileSaver.saveAs(blob, "save.json");
+
+        this.camInfo={id:'', index:'', name: '特定场景0',  img: '', log:0.0, lat:0.0, alt:0.0, pitch:0.0, roll:0.0, time: 1, }
+
       },
-      /** 切换tab */
-      handleClick (tab, event) {
-        // paneName
-        console.log(tab, event)
+      /**删除特定场景*/
+      onCamDel () {
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.camDataArr[this.camGroupIndex].group.splice( this.activeCamIndex, 1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       },
-      addGroup () {
-        alert('请完成添加分组方法')
+      /**替换特定场景*/
+      async onCamReplace () {
+        let that = this
+        var canvas = this.viewer.scene.canvas
+        window.pageYOffset = 0
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+
+        html2canvas(canvas, { scale: 0.05 }).then((canvas) => {
+          let img = canvas.toDataURL('image/png')
+          that.camInfo.img = img
+        })
+
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        this.getCamPos()
+
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].log = this.camInfo.log
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].lat = this.camInfo.lat
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].alt = this.camInfo.alt
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].heading = this.camInfo.heading
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].pitch = this.camInfo.pitch
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].roll = this.camInfo.roll
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].img = this.camInfo.img
+
       },
-      delGroup(){
-        alert('请完成删除分组方法')
+      /**更改特定场景*/
+      camEdit () {
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].name = this.camInfo.name;
+        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].time = this.camInfo.time;
+        this.isShowDlgCamEdit = false
+
       },
-      editGroup(){
-        alert('请完善编辑分组方法')
+      /**飞到指定位置*/
+      onCamImg (camInfo,camGroupIndex,camIndex) {
+        this.camImgHighlight(camGroupIndex,camIndex)
+        this.activeCamIndex = camIndex//以经飞过的排序号
+        this.viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(camInfo.log, camInfo.lat, camInfo.alt),
+          orientation: {
+            heading: camInfo.heading,
+            pitch: camInfo.pitch,
+            roll: camInfo.roll
+          },
+          duration: camInfo.time,
+          easingFunction: Cesium.EasingFunction.LINEAR_NONE
+        })
+      },
+      /**img高亮*/
+      async camImgHighlight(camGroupIndex,camIndex){
+        this.activeCamIndex = camIndex
+        await new Promise(resolve => setTimeout(resolve, 200))
+        let camImgDom = this.$refs[`camGroup${camGroupIndex}`+`cam${camIndex}`][0]
+
+        if(this.lastCamImgDom!==undefined){
+          this.lastCamImgDom.setAttribute('class','camImg')
+        }
+        camImgDom.setAttribute('class','camImgSel')
+        this.lastCamImgDom = camImgDom
+      },
+      /**选择文件*/
+      onCamDataArrLoad (event) {
+        var that = this
+        var input = event.target
+        var reader = new FileReader()
+        reader.onload = function () {
+          if (reader.result) {
+            //显示文件内容
+            that.camDataArr = JSON.parse(reader.result)
+
+          }
+        }
+        reader.readAsText(input.files[0])
+        this.isShowDlgCamLoad = false
+      },
+      /**保存相机点*/
+      onCamDataArrSave () {
+        var content = JSON.stringify(this.camDataArr)
+        var blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+        FileSaver.saveAs(blob, 'cam.json')
       },
 
-      delView(){
-        alert('请完善删除方法')
+      /**场景组播放*/
+      async onCamGroupPlay () {
+        let that = this
+        let camGroup = this.camDataArr[this.camGroupIndex].group
+        let ai = this.activeCamIndex
+        this.isFly = true;
+        for (let i = ai; i < camGroup.length; i++) {
+          if(that.isFly ==true){
+            that.onCamImg(camGroup[i],this.camGroupIndex,i)
+            await new Promise(resolve => setTimeout(resolve, camGroup[i].time * 1000))
+          }
+          this.activeCamIndex = i
+        }
       },
-      replaceView(){
-        alert('请完善替换方法')
+      /**场景组暂停*/
+      onCamGroupPlayPause(){
+        this.isFly = false;
+        this.viewer.camera.cancelFlight();
       },
-      editView(){
-        alert('请完善此编辑方法')
-      },
-      ViewType(event){
-        if(event.path[0].tagName==='I') {
-          if (event.path[0].className == "el-icon-s-unfold") {
-            event.path[0].className = "el-icon-menu"
+      onViewType (event) {
+        if (event.path[0].tagName === 'I') {
+          if (event.path[0].className == 'el-icon-s-unfold') {
+            event.path[0].className = 'el-icon-menu'
           } else {
-            event.path[0].className = "el-icon-s-unfold"
+            event.path[0].className = 'el-icon-s-unfold'
           }
         }
         // alert('请完其它Q')
       }
-    }
+    },
+    computed: {
+      listensPage () {
+        return this.$store.state.pathNavPageName
+      }
+    },
+    watch: {
+      listensPage: function () {
+        this.activeTapName = this.$store.state.pathNavPageName
+      }
+    },
   }
-
 </script>
 
 <style>
 
-
-  #dlgPathNav .el-tabs__header {
-    padding: 0;
-    position: relative;
-    margin: 0 0 0px;
-  }
-
-  #dlgPathNav .el-tabs__item {
-    padding: 0px 20px;
-    height: 40px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    line-height: 30px;
-    display: inline-block;
-    list-style: none;
-    font-size: 16px;
-    font-weight: 500;
-    color: #2ec5ad;
-    position: relative;
-  }
-
-  #dlgPathNav .el-tabs__item:hover {
-    color: #409EFF;
-    cursor: pointer;
-  }
-
-  #dlgPathNav .el-tabs__item.is-active {
-    color: #409EFF;
-  }
-
-  #dlgPathNav .el-tabs__content {
-    overflow: hidden;
-    position: relative;
-    height: 100%;
-  }
-
-  #dlgPathNav .el-tab-pane {
-    height: 100%;
-    background-color: rgba(38, 38, 38, 0.7);
-  }
-
-  #dlgPathNav .el-header {
-    padding: 2px 5px;
-    font-size: 16px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-  }
-
-  #dlgPathNav .el-button {
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0);
-    /*border: 1px solid #DCDFE6;*/
-    color: #2ec5ad;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    -webkit-transition: .1s;
-    transition: .1s;
-    font-weight: 500;
-    padding: 0px 0px;
-    font-size: 18px;
-    border-radius: 4px;
-  }
-
-
-  #dlgPathNav .el-button:hover{
-    color: #e5e1e1;
-    background : #2c3e50;
-  }
-  #dlgPathNav .el-button i{
-    padding: 8px 6px;
-  }
-  #dlgPathNav .el-main {
-    display: block;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    -ms-flex-preferred-size: auto;
-    flex-basis: auto;
-    overflow: auto;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 0px;
-    height: 400px;
-    width: 320px;
-    background : rgba(255, 255, 255, 0);
-  }
-
-  #dlgPathNav .el-collapse-item__header {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    height: 38px;
-    line-height: 48px;
-    background-color: rgba(239, 255, 244, 0);
-    color: #2EC5AD;
-    cursor: pointer;
-    border-bottom: 2px solid #2ec5ad;
-    font-size: 13px;
-    font-weight: 500;
-    -webkit-transition: border-bottom-color .3s;
-    transition: border-bottom-color .3s;
-    outline: 0;
-  }
-  #dlgPathNav .el-collapse-item__wrap {
-    will-change: height;
-    background-color: rgba(255, 255, 255, 0);
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    border-bottom: 1px solid #2ec5ad;
-  }
-
-  #dlgPathNav .picdiv{
+  #dlgPathNav .camDiv {
     float: left;
-    margin: 10px 0px 0px 10px;
+    margin: 0px 0px 0px 10px;
+    font-size: 0;
   }
 
-  #dlgPathNav .picdiv img{
+  #dlgPathNav .camDiv .camImg {
     width: 88px;
-    height: 88px;
-    border:2px solid #2EC5AD;
-  }
-  #dlgPathNav .picdiv img:hover{
-    border:2px solid #409EFF;
+    height: 45px;
+    border: 2px solid #2ec5ad;
 
   }
-  #dlgPathNav .pictext{
-    text-align:center;
+  #dlgPathNav .camDiv .camImgSel {
+    width: 88px;
+    height: 45px;
+    border: 4px solid #409EFF;
+  }
+  #dlgPathNav .camDiv .camImg:hover {
+    border: 2px solid #409EFF;
+
+  }
+
+  #dlgPathNav .pictext {
+    text-align: center;
     color: #2EC5AD;
+    width: 88px;
+    font-size: 12px;
+    word-break: break-all;
+    word-wrap: break-word;
   }
-  #dlgPathNav .pictext:hover{
-    color: #409EFF;
-  }
+
 
 </style>

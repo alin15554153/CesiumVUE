@@ -3,18 +3,27 @@
     <div ref="cesiumContainer" id="cesiumContainer" ></div>
 <!--    <div ref="cesiumContainer2" id="cesiumContainer2" ></div>-->
     <toolBar @on-open="openDialog"></toolBar>
-    <p ref=""></p>
-    <dialogCom v-show ='isShowBaseLayer' @on-close="closeDialog('isShowBaseLayer')">
+
+    <dialogCom v-show ='isShowLayer' @on-close="closeDialog('isShowLayer')" style="top:55px;left: 10px">
+      <dlgLayer></dlgLayer>
+    </dialogCom>
+
+    <dialogCom v-show ='isShowBaseLayer' @on-close="closeDialog('isShowBaseLayer')" style="top:150px;left: 400px">
       <dlgBaseLayer></dlgBaseLayer>
     </dialogCom>
 
-    <dialogCom v-show ='isShowPathNav' @on-close="closeDialog('isShowPathNav')">
+    <dialogCom v-show ='isShowModel3d' @on-close="closeDialog('isShowModel3d')" style="top:200px;left: 500px">
+      <dlgModel3d></dlgModel3d>
+    </dialogCom>
+
+    <dialogCom v-show ='isShowPoint' @on-close="closeDialog('isShowPoint')" style="top:250px;left: 600px">
+      <dlgPoint></dlgPoint>
+    </dialogCom>
+
+    <dialogCom v-show ='isShowPathNav' @on-close="closeDialog('isShowPathNav')" style="top:300px;left: 700px">
       <dlgPathNav></dlgPathNav>
     </dialogCom>
 
-    <dialogCom v-show ='isShowModel3d' @on-close="closeDialog('isShowModel3d')">
-      <dlgModel3d></dlgModel3d>
-    </dialogCom>
 
     <dlgSplitScreen v-if = "isShowSplitScreen"></dlgSplitScreen>
 
@@ -33,31 +42,38 @@
 
 <script>
 import Vue from 'vue'
-import dialogCom from '../components/dialogCom'
 import toolBar from '../components/toolBar'
+import dialogCom from '../components/dialogCom'
+import dlgLayer from '../components/dlgLayer'
 import dlgBaseLayer from '../components/dlgBaseLayer'
-import dlgPathNav from '../components/dlgPathNav'
 import dlgModel3d from '../components/dlgModel3d'
+import dlgPoint from '../components/dlgPoint'
+import dlgPathNav from '../components/dlgPathNav'
 import dlgSplitScreen from '../components/dlgSplitScreen'
-
 import testChild from '../components/test_child'
 
 export default {
   components: {
     toolBar,
     dialogCom,
+    dlgLayer,
     dlgBaseLayer,
-    dlgPathNav,
     dlgModel3d,
+    dlgPoint,
+    dlgPathNav,
+
     dlgSplitScreen,
     testChild
   },
   name: 'Index',
   data () {
     return {
+      isShowLayer: true,
       isShowBaseLayer: false,
+      isShowModel3d:true,
+      isShowPoint:true,
       isShowPathNav: false,
-      isShowModel3d:false,
+
       isShowSplitScreen:false,
       testParentData: '父组件21数据123',
       PtoCData: '传给子组件',
@@ -98,8 +114,19 @@ export default {
         timeline: false, //是否显示时间线控件
         sceneModePicker: true, //是否显示投影方式控件
         navigationHelpButton: false, //是否显示帮助信息控件
-        infoBox: true,  //是否显示点击要素之后显示的信息
-
+        infoBox: false,  //是否显示点击要素之后显示的信息
+        contextOptions:{
+          webgl:{
+            alpha: true,
+            depth:true,
+            stencil:true,
+            antialias:true,
+            premultipliedAlpha:true,
+            //通过canvas.toDataURL()实现截图需要将该项设置为true
+            preserveDrawingBuffer:true,
+            failIfMajorPerformanceCaveat:true
+          }
+        }
       }
       let viewer = new Cesium.Viewer('cesiumContainer', viewerOption)
       viewer._cesiumWidget._creditContainer.style.display = 'none'// 隐藏版权
@@ -177,4 +204,5 @@ export default {
     z-index: -1;
     /*display: none;*/
   }
+
 </style>

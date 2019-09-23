@@ -1,0 +1,23 @@
+{
+  "dataServerPub": [
+    { "name": "倾斜模型1",   "image": "assets/images/dataServerPub/qingxie1.png", "url": ""},
+    { "name": "手工模型1",   "image": "assets/images/dataServerPub/shougong1.png", "url": ""}
+  ],
+  "modelLibraryPub": [
+    {"modelGroupName":"公共安全库","modelGroup":[
+      { "name": "摄像头01",   "image": "assets/images/modelLibraryPub/cam01.png", "gltf":"assets/images/dataServerPub/cam01.gltf"},
+      { "name": "摄像头02",   "image": "assets/images/modelLibraryPub/cam02.png", "gltf": "assets/images/dataServerPub/cam02.gltf"},
+      { "name": "消防栓",   "image": "assets/images/modelLibraryPub/Hydrant.png", "gltf": "assets/images/dataServerPub/Hydrant.gltf"}
+    ]},
+    {"modelGroupName":"公共人物库","modelGroup":[
+      { "name": "保安",   "image": "assets/images/modelLibraryPub/baoan.jpg", "gltf": ""},
+      { "name": "警察",   "image": "assets/images/modelLibraryPub/polic.jpg", "gltf": ""},
+      { "name": "工作人员",   "image": "assets/images/modelLibraryPub/worker.jpg", "gltf": ""}
+    ]},
+    {"modelGroupName":"公共车辆库","modelGroup":[
+      { "name": "救护车",   "image": "assets/images/modelLibraryPub/car2.jpg", "gltf": ""},
+      { "name": "警车",   "image": "assets/images/modelLibraryPub/car3.jpg", "gltf": ""},
+      { "name": "消防车",   "image": "assets/images/modelLibraryPub/car4.png", "gltf": ""}
+    ]}
+  ]
+}

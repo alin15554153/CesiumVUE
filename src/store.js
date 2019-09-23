@@ -5,22 +5,26 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    dlgPathNavPageName : 'first',
+    pathNavPageName : 'first',
     baseLayerGroupPageName :'first',
-
+    pointSetDraw:[]
   },
+  getters: {},
   mutations: {
-
-    setdlgPathNavPageName(state,name){
-      state.dlgPathNavPageName = name;
+      PATH_NAV_PAGE_NAME(state,name){
+      state.pathNavPageName = name;
     },
-    setBaseLayerGroupPageName(state,name){
+
+      BASE_LAYER_GROUP_PAGE_NAME(state,name){
        state.baseLayerGroupPageName = name;
     }
   },
   actions: {
-    // setdlgPathNavPageName(context,name){
-    //   context.commit('setdlgPathNavPageName',name)
-    // }
+    setdlgPathNavPageName(context,name){
+      context.commit('PATH_NAV_PAGE_NAME',name)
+    },
+    setBbaseLayerGroupPageName(context,name){
+      context.commit('BASE_LAYER_GROUP_PAGE_NAME',name)
+    }
   }
 })

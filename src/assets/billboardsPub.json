@@ -1,0 +1,42 @@
+{
+  "billboardsPub": [
+    { "name": "摄像头1",   "image": "assets/images/billboardsPub/cam1.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "摄像头2",   "image": "assets/images/billboardsPub/cam2.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "信号",   "image": "assets/images/billboardsPub/xinhao.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "无线",   "image": "assets/images/billboardsPub/wifi.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "压风",   "image": "assets/images/billboardsPub/fan.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "煤堆",   "image": "assets/images/billboardsPub/work_meidui.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "工作员",   "image": "assets/images/billboardsPub/work_people.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "钻机",   "image": "assets/images/billboardsPub/work_zuanji.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+
+    { "name": "工具1",   "image": "assets/images/billboardsPub/work_tool.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "工具2",   "image": "assets/images/billboardsPub/work_tq.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "挖掘",   "image": "assets/images/billboardsPub/work_work.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "小推车",   "image": "assets/images/billboardsPub/work_tuiche.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+
+    { "name": "铲车",   "image": "assets/images/billboardsPub/work_ctj.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "挖掘机",   "image": "assets/images/billboardsPub/work_wjj.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "空车",   "image": "assets/images/billboardsPub/work_carempty.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "满车",   "image": "assets/images/billboardsPub/work_carfull.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "拖车",   "image": "assets/images/billboardsPub/work_tuoche.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+
+
+    { "name": "火源",   "image": "assets/images/billboardsPub/fire.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "消防员",   "image": "assets/images/billboardsPub/people_fire.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "灭火器",   "image": "assets/images/billboardsPub/fire2.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "消防栓",   "image": "assets/images/billboardsPub/fire3.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "消防车",   "image": "assets/images/billboardsPub/car_fire.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "警车",   "image": "assets/images/billboardsPub/car_police.png",            "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+    { "name": "警察",   "image": "assets/images/billboardsPub/people_pilice2.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "救护车",   "image": "assets/images/billboardsPub/car_Ambulance.png",   "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER" },
+
+
+
+    { "name": "位置",   "image": "assets/images/billboardsPub/pos.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "树1",   "image": "assets/images/billboardsPub/tree1.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "树2",   "image": "assets/images/billboardsPub/tree2.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "树3",   "image": "assets/images/billboardsPub/tree3.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"},
+    { "name": "吊塔",   "image": "assets/images/billboardsPub/work_dt.png",             "height":128, "width": 128, "scale":1,  "distance": 5000, "verticalOrigin":  "BOTTOM","horizontalOrigin": "CENTER"}
+
+  ]
+}

@@ -1,11 +1,23 @@
 <template>
   <div class="btn-toolbar" style="position: absolute; left: 0px; top: 0px;">
     <div id='toolbar' class='toolbar' style='margin: 5px 5px 5px 8px;'>
+      <a title='系统' class='btn'>
+        <el-dropdown trigger="hover" placement="bottom">
+          <span class='iconfont icon-xitong3' ></span>
+          <el-dropdown-menu>
+            <el-dropdown-item><a   title='重置项目' class='btn'>
+              <span class='iconfont icon-qingchu'></span></a></el-dropdown-item>
+            <el-dropdown-item><a   title='打开项目' class='btn'>
+              <span class='iconfont icon-daoru'></span></a></el-dropdown-item>
+            <el-dropdown-item><a   title='保存项目' class='btn'>
+              <span class='iconfont icon-baocun'></span></a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </a>
       <a id='layerMangerBtn' title='图层列表' class='btn'> <span class='iconfont icon-shu' ></span></a>
       <a class='btn'><span style='border-left : 1px solid #dddddd;  padding: 0px 1px;   display:block;    height:40px;' ></span></a>
       <a id='expandBtn' style='display : none;' title='展开' class='btn'  @click="onExpandBtnClk()"><span class='iconfont icon-angle-right'></span></a>
       <div id='btnGroup' class='btn-group'>
-
         <a title='切换底图' class='btn' @click="onBaseLayerBtnClk('first')">
           <el-dropdown trigger="hover" placement="bottom">
             <span class='iconfont icon-lujing' ></span>
@@ -95,7 +107,8 @@ export default {
     //显示路径导航对话框
     onDlgPathNavBtnClk (name) {
       this.$parent.$data.isShowPathNav = true//显示路径面板
-      this.$store.commit('setdlgPathNavPageName',name)
+      this.$store.dispatch('setdlgPathNavPageName',name)
+
     },
     //显示分屏
     onSplitScreen(event){
@@ -114,7 +127,7 @@ export default {
       }
     },
     onBaseLayerBtnClk (name) {
-      this.$store.commit('setBaseLayerGroupPageName',name)
+      this.$store.dispatch('setBbaseLayerGroupPageName',name)
       this.$parent.$data.isShowBaseLayer = true//显示底图面板
     },
     setView (lon, lat, height) {
