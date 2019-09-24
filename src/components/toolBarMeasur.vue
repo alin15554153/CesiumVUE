@@ -4,23 +4,28 @@
       <span class='iconfont icon-celiang'></span>
       <el-dropdown-menu>
         <el-dropdown-item><a   title='坐标' class='btn' @click="measurePoint"><span class='iconfont icon-coordinate'></span></a></el-dropdown-item>
-        <el-dropdown-item><a   title='水平距离' class='btn'><span class='iconfont icon-liangsuan'></span></a></el-dropdown-item>
-        <el-dropdown-item><a   title='垂直距离' class='btn'><span class='iconfont icon-iEarth-R-_liangsuan-ce'></span></a></el-dropdown-item>
-        <el-dropdown-item><a   title='面积' class='btn'><span class='iconfont icon-mianji'></span></a></el-dropdown-item>
+        <el-dropdown-item><a   title='水平距离' class='btn' @click="measureHorizontalDis"><span class='iconfont icon-liangsuan'></span></a></el-dropdown-item>
+        <el-dropdown-item><a   title='垂直距离' class='btn' @click="measureVerticalDis"><span class='iconfont icon-iEarth-R-_liangsuan-ce'></span></a></el-dropdown-item>
+        <el-dropdown-item><a   title='面积' class='btn'  @click="measureArea"><span class='iconfont icon-mianji'></span></a></el-dropdown-item>
+        <el-dropdown-item><a   title='清除' class='btn' @click="measureClear"><span class='iconfont icon-iEarth-R-_liangsuan-guan'></span></a></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </a>
 </template>
 
 <script>
-
+  import LineDynamicMaterial from '../js/materials/LineDynamicMaterial'
+  import CircleDynamicMaterial from '../js/materials/CircleDynamicMaterial'
   export default {
     name: 'toolBarMeasur',
     methods:{
       measurePoint(){
-        let viewer = this.viewer;
+        if (this.viewer){
+          this.viewer.ToolManager.measurePoint(function () {
+          });
+        }
 
-        let _drawHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
+        /*let _drawHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
 
         _drawHandler.setInputAction(function (event) {
           var wp = event.position;
@@ -36,8 +41,59 @@
             return;
           }
           alert(cartesian)
-        },Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        },Cesium.ScreenSpaceEventType.LEFT_CLICK);*/
       },
+      measureHorizontalDis(){
+        //线型动态纹理
+        /*var entity2 = this.viewer.entities.add({
+          name: 'LineDynamicMaterial',
+          polyline: {
+            positions: Cesium.Cartesian3.fromDegreesArrayHeights([128, 42, 2500,
+              128 + 10, 42, 2500,
+              128 + 10, 42 + 10, 2500, ]),
+            width: 15,
+            material: new Cesium.LineDynamicMaterial(Cesium.Color.ORANGE, 3000)
+          }
+        });
+        var entity = this.viewer.entities.add({
+          name: 'CircleDynamicMaterial',
+          position: Cesium.Cartesian3.fromDegrees(128, 42, 3000),
+          ellipse: {
+            height:0,
+            semiMinorAxis:150000,
+            semiMajorAxis:150000,
+            material: new Cesium.CircleDynamicMaterial(Cesium.Color.ORANGE, 3000),
+            clampToGround: true,
+          }
+        });
+        return;*/
+
+        if (this.viewer){
+          this.viewer.ToolManager.measureHorizontalDis(function () {
+          });
+        }
+      },
+      measureVerticalDis(){
+        if (this.viewer){
+          this.viewer.ToolManager.measureVerticalDis(function () {
+          });
+        }
+      },
+      measureArea(){
+        if (this.viewer){
+          this.viewer.ToolManager.measureArea(function () {
+          });
+        }
+      },
+      measureClear(){
+        var _mCount = this.viewer.entities.values.length;
+        for (var i= 0; i < this.viewer.entities.values.length; ++i){
+          var _mEntity = this.viewer.entities.values[i];
+          if (false == Cesium.defined(_mEntity) || false == Cesium.defined(_mEntity.layerId) || _mEntity.layerId != 'Measure') continue;
+          this.viewer.entities.remove(_mEntity);
+          i--;
+        }
+      }
     }
   }
 </script>
