@@ -66,6 +66,16 @@
   export default {
     data () {
       return {
+        modelInfo:{
+          id:'',
+          gltfUrl:'',
+          log:'',
+          lat:'',
+          alt:'',
+          heading:'',
+          pitch:'',
+          roll:'',
+      },
         activeModelIndex:-1,
         lastModelImgDom: undefined,
         dataServerPub:[],

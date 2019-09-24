@@ -1,13 +1,15 @@
 <template>
   <el-tabs id='dlgPoint' v-model="activeTapName">
-    <el-tab-pane label="绘制点" name="first">
+    <el-tab-pane label="矢量点" name="first">
       <el-container>
         <el-header height='40px'>
           <el-row>
-            <el-button type="text" :class="[isDraw ? 'el-buttonSel':'el-button']" title="启动绘制" icon="el-icon-edit"
+            <el-button type="text" :class="[isDraw ? 'el-buttonSel':'el-button']" title="启动绘制" icon="el-icon-plus"
                        @click="onPointDraw"></el-button>
             <el-button type="text" :class="[isDel ? 'el-buttonSel':'el-button']" title="启动删除"
                        icon="el-icon-delete-solid" @click="onPointDel"></el-button>
+            <el-button type="text" :class="[isEdit ? 'el-buttonSel':'el-button']" title="启动编辑" icon="el-icon-edit"
+                       @click="onPointEdit"></el-button>
             <el-button type="text" :class="[isMove ? 'el-buttonSel':'el-button']" title="启动移动" icon="el-icon-rank"
                        @click="onPointMove"></el-button>
             <el-divider direction="vertical"></el-divider>
@@ -16,6 +18,8 @@
             <el-button type="text" title="读取自定义符号" icon="el-icon-folder-opened" @click="onImgLoad"></el-button>
             <el-button type="text" title="导出自定义符号" icon="el-icon-download" @click="onImgSave"></el-button>
             <el-button type="text" title="上传自定义符号" icon="el-icon-upload2" @click="onImgUpdata"></el-button>
+            <el-button type="text" title="上传自定义符号" icon="el-icon-upload2"
+                       @click.stop.prevent="doClick($event)"></el-button>
           </el-row>
         </el-header>
         <el-main>
@@ -26,45 +30,66 @@
                   <el-tag>名称:</el-tag>
                 </el-col>
                 <el-col :span="12">
-                  <el-input v-model="pointInfo.pointName" placeholder="请输入名称"></el-input>
+                  <el-input v-model="pointInfo.name" placeholder="请输入名称"></el-input>
                 </el-col>
                 <el-col :span="8">
-                  <el-checkbox v-model="pointInfo.pointNameShow" label="显  示" border size="mini"
+                  <el-checkbox v-model="pointInfo.nameShow" label="显  示" border size="mini"
                                @change="onPointNameShow"></el-checkbox>
                 </el-col>
               </el-row>
 
               <el-row>
-                <el-col :span="8">
-                  <el-tag>字体/符号缩放:</el-tag>
+                <el-col :span="4">
+                  <el-tag>缩放:</el-tag>
                 </el-col>
-                <el-col :span="8">
-                  <el-input-number v-model="pointInfo.pointScale" :min="1" :max="10" label="描述文字" size="mini"
+                <el-col :span="12">
+                  <el-input-number v-model="pointInfo.scale" :min="1" :max="10" label="描述文字" size="mini"
                                    @change="onPointScale"></el-input-number>
                 </el-col>
                 <el-col :span="4">
                   <el-tag>颜色:</el-tag>
                 </el-col>
                 <el-col :span="4">
-                  <el-color-picker v-model="pointInfo.pointColor"
+                  <el-color-picker v-model="pointInfo.color"
                                    show-alpha
                                    :predefine="pointColorPredefine" size="mini"
                                    @change="onPointColor"></el-color-picker>
                 </el-col>
               </el-row>
+
+              <el-row>
+                <el-col :span="4">
+                  <el-tag>高度:</el-tag>
+                </el-col>
+                <el-col :span="10">
+                  <el-input-number v-model="pointInfo.height" :min="1" :max="10" label="挤出高度" size="mini"
+                                   @change="onPointHeight"></el-input-number>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>顶部颜色:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-color-picker v-model="pointInfo.heightColor"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                                   @change="onPointHeightColor"></el-color-picker>
+                </el-col>
+              </el-row>
+
+
               <el-row>
                 <el-col :span="5">
                   <el-tag>波纹半径:</el-tag>
                 </el-col>
                 <el-col :span="10">
-                  <el-slider v-model="pointInfo.pointDiffusionRadius" @change="onPointDiffusionRadius"></el-slider>
+                  <el-slider v-model="pointInfo.diffusionRadius" @change="onPointDiffusionRadius"></el-slider>
                 </el-col>
                 <el-col :span="4">
-                  <el-tooltip :content="pointInfo.pointRippleType" placement="top">
+                  <el-tooltip :content="pointInfo.rippleType" placement="top">
                     <el-switch
                       :width="25"
                       @change="onPointRippleType"
-                      v-model="pointInfo.pointRippleType"
+                      v-model="pointInfo.rippleType"
                       active-color="#13ce66"
                       inactive-color="#ff4949"
                       active-value="连续"
@@ -73,11 +98,11 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4">
-                  <el-tooltip :content="pointInfo.pointRippleDirection" placement="top">
+                  <el-tooltip :content="pointInfo.rippleDirection" placement="top">
                     <el-switch
                       :width="25"
                       @change="onPointRippleDirection"
-                      v-model="pointInfo.pointRippleDirection"
+                      v-model="pointInfo.rippleDirection"
                       active-color="#13ce66"
                       inactive-color="#ff4949"
                       active-value="正向"
@@ -113,28 +138,57 @@
                 </el-col>
               </el-row>
             </el-collapse-item>
+            <el-collapse-item title="WFS读取设置" name="5">
+              <el-row>
+                <el-col :span="23">
+                  <el-input placeholder="请输入路径地址" v-model="pointWfsInfo.url">
+                    <template slot="prepend">Http://</template>
+                    <el-button slot="append">添加</el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>高度字段:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.height" placeholder="字段名"></el-input>
+                </el-col>
+                <el-col :span="5">
+                  <el-tag>半径字段:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.size" placeholder="字段名"></el-input>
+                </el-col>
+              </el-row>
+            </el-collapse-item>
+
           </el-collapse>
         </el-main>
       </el-container>
     </el-tab-pane>
 
-    <el-tab-pane label="加载点" name="second">
 
-    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
+  import eventBus from '../js/eventBus'
+  import mixin from '../js/mixin'
+
   export default {
+    mixins: [mixin],
     name: 'dlgPoint',
+    components: {},
     data () {
       return {
         activeBillboardIndex: -1,//记录当前选中dom对应数据的索引
         lastbillboardImgDom: undefined,
-        activeCollapseNames: ['1', '2', '3', '4'],
+        activeCollapseNames: ['1', '2', '3', '4','5'],
         activeTapName: 'first',
         isDraw: false,
         isDel: false,
+        isEdit: false,
         isMove: false,
         /**公共符号库图片及参数*/
         billboardsDataPub: '',
@@ -143,28 +197,35 @@
         /**所有绘制的点的Json参数集合用于保存与读取*/
         pointJsonSet: [],
         /**单点信息*/
+        pointWfsInfo:{
+          url:'',
+          height:'',
+          size:'',
+
+        },
         pointInfo: {
-          pointName: '点01',
-          pointNameShow: false,
 
           log: 0.0,
           lat: 0.0,
           alt: 0.0,
 
           isBillbord: false,
-          img: '',
-          width: 128,
-          height: 128,
-          verticalOrigin: 'BOTTOM',
-          horizontalOrigin: 'CENTER',
+          imgUrl: '',
+          imgWidth: 128,
+          imgHeight: 128,
+          billBoardVerticalOrigin: 'BOTTOM',
+          billBoardHorizontalOrigin: 'CENTER',
+          distance: 5000,//显示距离
 
-          pointScale: 1,
-          distance: 5000,
-
-          pointColor: '#2EC5AD',
-          pointDiffusionRadius: 1,
-          pointRippleType: '连续',
-          pointRippleDirection: '正向',
+          name: '点01',
+          nameShow: false,
+          scale: 1,
+          color: '#2EC5AD',
+          height: 0,
+          heightColor: '#2EC5AD',
+          diffusionRadius: 1,
+          rippleType: '连续',
+          rippleDirection: '正向',
         },
         pointCoordinate: '116.4,39.9,100',
         pointColorPredefine: [
@@ -191,7 +252,7 @@
     beforeMount () {
 
     },
-    beforeCreate(){
+    beforeCreate () {
 
     },
     mounted () {
@@ -203,6 +264,11 @@
     },
 
     methods: {
+      doClick (event) {
+        eventBus.$emit('getTarget', event.target)
+        eventBus.$emit('layerAdd', 'event.target')
+        this.hello()
+      },
       initImg () {
         /**初始化公共符号数组*/
         let temp = require('../assets/billboardsPub').billboardsPub
@@ -220,6 +286,12 @@
 
       },
       onPointColor () {
+
+      },
+      onPointHeight(){
+
+      },
+      onPointHeightColor(){
 
       },
       onPointDiffusionRadius () {
@@ -325,6 +397,9 @@
           this.handlerPointDel.destroy()
         }
       },
+      onPointEdit(){
+
+      },
       onPointMove () {
         if (this.isMove === false) {
           this.isMove = true
@@ -392,7 +467,8 @@
   }
 
   #dlgPoint .el-main {
-    height: 550px;
+    height: 100%;
+    width: 350px;
   }
 
   #dlgPoint .el-col .el-button {

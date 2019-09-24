@@ -220,7 +220,7 @@
     height: 30px;
     line-height: 30px;
     outline: 0;
-    padding: 0 15px;
+    padding: 0 5px;
     -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     width: 100%;
@@ -356,7 +356,7 @@
   /*****************************************************************el-slider滑块*/
   body .el-slider {
     margin: 0;
-    padding: 12px 10px;
+    padding: 12px 0px  12px 5px;
   }
   /*滑块线*/
   body .el-slider__runway {

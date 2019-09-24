@@ -130,7 +130,7 @@ AreaTool.prototype.clear = function () {
             backgroundPadding:new Cesium.Cartesian2(7, 5),
             scale:1.0,
             horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-            verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+            pointBillBoardVerticalOrigin : Cesium.VerticalOrigin.BOTTOM,
             eyeOffset : Cesium.Cartesian3.ZERO,
             pixelOffset : new Cesium.Cartesian2(0, -10),
             //translucencyByDistance,
@@ -157,7 +157,7 @@ AreaTool.prototype.clear = function () {
           pixelOffset : new Cesium.ConstantProperty(new Cesium.Cartesian3(0, 0, -500)),
           eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
           horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-          verticalOrigin : Cesium.VerticalOrigin.CENTER,
+          pointBillBoardVerticalOrigin : Cesium.VerticalOrigin.CENTER,
           scale : 1.0,
           color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
 

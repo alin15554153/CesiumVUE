@@ -8,22 +8,33 @@
       <dlgLayer></dlgLayer>
     </dialogCom>
 
-    <dialogCom v-show ='isShowBaseLayer' @on-close="closeDialog('isShowBaseLayer')" style="top:150px;left: 400px">
+    <dialogCom v-show ='isShowBaseLayer' @on-close="closeDialog('isShowBaseLayer')" style="top:100px;left: 100px">
       <dlgBaseLayer></dlgBaseLayer>
     </dialogCom>
 
-    <dialogCom v-show ='isShowModel3d' @on-close="closeDialog('isShowModel3d')" style="top:200px;left: 500px">
+    <dialogCom v-show ='isShowModel3d' @on-close="closeDialog('isShowModel3d')" style="top:150px;left: 200px">
       <dlgModel3d></dlgModel3d>
     </dialogCom>
 
-    <dialogCom v-show ='isShowPoint' @on-close="closeDialog('isShowPoint')" style="top:250px;left: 600px">
+    <dialogCom v-show ='isShowPoint' @on-close="closeDialog('isShowPoint')" style="top:200px;left: 300px">
       <dlgPoint></dlgPoint>
     </dialogCom>
 
-    <dialogCom v-show ='isShowPathNav' @on-close="closeDialog('isShowPathNav')" style="top:300px;left: 700px">
+    <dialogCom v-show ='isShowLine' @on-close="closeDialog('isShowLine')" style="top:250px;left: 400px">
+      <dlgLine></dlgLine>
+    </dialogCom>
+
+    <dialogCom v-show ='isShowPloygon' @on-close="closeDialog('isShowPloygon')" style="top:300px;left: 500px">
+      <dlgPloygon></dlgPloygon>
+    </dialogCom>
+
+    <dialogCom v-show ='isShowPathNav' @on-close="closeDialog('isShowPathNav')" style="top:350px;left: 600px">
       <dlgPathNav></dlgPathNav>
     </dialogCom>
 
+    <dialogCom v-show ='isShowEffects' @on-close="closeDialog('isShowEffects')" style="top:350px;left: 600px">
+      <dlgEffects></dlgEffects>
+    </dialogCom>
 
     <dlgSplitScreen v-if = "isShowSplitScreen"></dlgSplitScreen>
 
@@ -48,8 +59,11 @@ import dlgLayer from '../components/dlgLayer'
 import dlgBaseLayer from '../components/dlgBaseLayer'
 import dlgModel3d from '../components/dlgModel3d'
 import dlgPoint from '../components/dlgPoint'
+import dlgLine from '../components/dlgLine'
+import dlgPloygon from '../components/dlgPloygon'
 import dlgPathNav from '../components/dlgPathNav'
 import dlgSplitScreen from '../components/dlgSplitScreen'
+import dlgEffects from '../components/dlgEffects'
 import testChild from '../components/test_child'
 import ToolManager from '../js/tools/toolManager'
 import CesiumNavigation from "cesium-navigation-es6";
@@ -62,19 +76,25 @@ export default {
     dlgBaseLayer,
     dlgModel3d,
     dlgPoint,
+    dlgPloygon,
+    dlgLine,
     dlgPathNav,
 
     dlgSplitScreen,
+    dlgEffects,
     testChild
   },
   name: 'Index',
   data () {
     return {
-      isShowLayer: true,
+      isShowLayer: false,
       isShowBaseLayer: false,
-      isShowModel3d:true,
-      isShowPoint:true,
+      isShowModel3d:false,
+      isShowPoint:false,
+      isShowLine:false,
+      isShowPloygon:false,
       isShowPathNav: false,
+      isShowEffects: false,
 
       isShowSplitScreen:false,
       testParentData: '父组件21数据123',

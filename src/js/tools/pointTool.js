@@ -77,7 +77,7 @@ function PointTool(viewer, onCreate) {
               pixelOffset : new Cesium.Cartesian2(0, -10),
               eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
               horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-              verticalOrigin : Cesium.VerticalOrigin.CENTER,
+              pointBillBoardVerticalOrigin : Cesium.VerticalOrigin.CENTER,
               scale : 1.0,
               color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
 
@@ -95,7 +95,7 @@ function PointTool(viewer, onCreate) {
               backgroundPadding:new Cesium.Cartesian2(7, 5),
               scale:1.0,
               horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-              verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+              pointBillBoardVerticalOrigin : Cesium.VerticalOrigin.BOTTOM,
               eyeOffset : Cesium.Cartesian3.ZERO,
               pixelOffset : new Cesium.Cartesian2(0, -10),
               //translucencyByDistance,

@@ -53,7 +53,7 @@
         tileUrl:'',
         selectElement: '',
         activeName: 'first',
-        activeCollapseNames: ['1', '2'],
+        activeCollapseNames: ['1','2'],
         doms:[],
         dems:[]
       }
@@ -72,22 +72,52 @@
     mounted () {
       let url =  require('../assets/doms.json');
       this.doms = url.doms;
+
       url =  require('../assets/dems.json');
       this.dems = url.dems;
+      /*debugger
+      var domlayer = $("#domLayer");
+      if (domlayer == null) return;
+      domlayer.html('');
+      this.$data.doms.forEach(function(currentValue, index, arr){
+        var _mItemli = "<div class='picdiv'>" +
+          "<img src= '" + currentValue.image + "' @click='showBingRoadMap' alt=''>" +
+          "<p class='pictext'>" + currentValue.name + "</p>" +
+          "</div>";
+
+        var _mElement= $(_mItemli);
+        _mElement.data('data', currentValue);
+        var _mui = domlayer.append(_mElement);
+      });*/
     },
     methods: {
       /** 切换tab */
       onTabHandleClick (tab, event) {
         console.log(tab, event)
       },
-
+      /** 设置地图 */
+      showBingRoadMap () {
+        let viewer = this.viewer
+        viewer.imageryLayers.removeAll()
+        var shadedRelief1 = new Cesium.WebMapTileServiceImageryProvider({
+          url: 'http://basemap.nationalmap.gov/arcgis/rest/services/USGSShadedReliefOnly/MapServer/WMTS',
+          layer: 'USGSShadedReliefOnly',
+          style: 'default',
+          format: 'image/jpeg',
+          tileMatrixSetID: 'default028mm',
+          // tileMatrixLabels : ['default028mm:0', 'default028mm:1', 'default028mm:2' ...],
+          maximumLevel: 19,
+          credit: new Cesium.Credit('U. S. Geological Survey')
+        })
+        viewer.imageryLayers.addImageryProvider(shadedRelief1)
+      },
       changeImageryProvider(providerName, options){
         let newoptions = {};
         for (var i in options){
-            if (typeof(options[i]) == 'string'  && options[i].substring(0, 4) == 'new ')
-              newoptions[i] = eval(options[i]);
-            else
-              newoptions[i] = options[i];
+          if (typeof(options[i]) == 'string'  && options[i].substring(0, 4) == 'new ')
+            newoptions[i] = eval(options[i]);
+          else
+            newoptions[i] = options[i];
         }
         let _mProvider = eval('new ' + providerName + '(newoptions)');
         this.viewer.imageryLayers.removeAll();
@@ -104,6 +134,10 @@
 
         this.viewer.terrainProvider = eval('new ' + providerName + '(newoptions)');
       },
+      loadByUrl(image){
+        let name = 'assets/images/mapboxSatellite.png';
+        return require(`../${image}`);
+      }
     }
   }
 </script>

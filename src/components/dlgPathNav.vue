@@ -61,7 +61,7 @@
 
         <el-main>
           <el-collapse v-model="camGroupName" accordion @change="onCamChange">
-            <el-collapse-item v-for="(camGroup,camGroupIndex) in camDataArr"
+            <el-collapse-item v-for="(camGroup,camGroupIndex) in camData"
                               :key="camGroup.id"
                               :title="camGroup.camGroupName"
                               :name="camGroup.camGroupName">
@@ -70,7 +70,7 @@
                    v-for="(camInfo,camIndex) in camGroup.group">
 
                 <img  class='camImg'
-                      :src="camInfo.img"
+                      :src="camInfo.Img"
                       :ref="`camGroup${camGroupIndex}`+`cam${camIndex}`"
                       alt=""
                      @click="onCamImg(camInfo,camGroupIndex,camIndex)"/>
@@ -108,7 +108,7 @@
     data () {
       return {
         urlUpload: '',
-        camDataArr: [],
+        camData: [],
         activeTapName: 'first',
         camGroupName: '特定场景组1',
         camGroupIndex:0,
@@ -124,10 +124,11 @@
           // id:'',
           // index:0,
           name: '特定场景0',
-          img: '',
+          Img: '',
           log:0.0,
           lat:0.0,
           alt:0.0,
+          heading:0.0,
           pitch:0.0,
           roll:0.0,
           time: 1,
@@ -147,17 +148,17 @@
       },
       /** 场景组切换折叠通知所有操作基于场景数据中哪个场景组 */
       onCamChange (collapse) {
-        this.camGroupIndex = this.camDataArr.findIndex(item => item.camGroupName === this.camGroupName)
+        this.camGroupIndex = this.camData.findIndex(item => item.camGroupName === this.camGroupName)
       },
       /**场景组新建*/
       onCamGroupAdd () {
         this.$prompt('请输入特定场景组名称', '提示', {
-          inputValue:'特定场景组'+this.camDataArr.length,
+          inputValue:'特定场景组'+this.camData.length,
           cancelButtonText: '取消',
           confirmButtonText: '确定',
         }).then(({ value }) => {
           this.camGroupName = value
-          this.camDataArr.push({ 'camGroupName': value, 'group': [] })
+          this.camData.push({ 'camGroupName': value, 'group': [] })
           this.onCamChange()
           this.$message({
             type: 'success',
@@ -177,7 +178,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.camDataArr.splice(this.camGroupIndex, 1)
+          this.camData.splice(this.camGroupIndex, 1)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -198,7 +199,7 @@
           cancelButtonText: '取消',
         }).then(({ value }) => {
 
-          that.camDataArr[this.camGroupIndex].camGroupName = value
+          that.camData[this.camGroupIndex].camGroupName = value
           this.camGroupName = value
           this.$message({
             type: 'success',
@@ -231,7 +232,7 @@
         window.pageYOffset = 0
         document.documentElement.scrollTop = 0
         document.body.scrollTop = 0
-        this.camInfo.name = '特定场景' + this.camDataArr[this.camGroupIndex].group.length
+        this.camInfo.name = '特定场景' + this.camData[this.camGroupIndex].group.length
         html2canvas(canvas, { scale: 0.05 }).then((canvas) => {
           let img = canvas.toDataURL('image/png')
           this.camInfo.img = img
@@ -243,16 +244,16 @@
         // this.camInfo.id = this.camGroupName + this.camInfo.name + this.activeCamIndex
         this.getCamPos()
         var copy = JSON.parse(JSON.stringify(this.camInfo)) //深copy
-        let index = this.camDataArr[this.camGroupIndex].group.length
+        let index = this.camData[this.camGroupIndex].group.length
         if(this.activeCamIndex===index-1){
-          this.camDataArr[this.camGroupIndex].group.push(copy)
+          this.camData[this.camGroupIndex].group.push(copy)
           this.camImgHighlight(this.camGroupIndex,index)
         }else {
-          this.camDataArr[this.camGroupIndex].group.splice(this.activeCamIndex+1,0,copy)
+          this.camData[this.camGroupIndex].group.splice(this.activeCamIndex+1,0,copy)
           this.camImgHighlight(this.camGroupIndex,this.activeCamIndex+1)
         }
 
-        this.camInfo={id:'', index:'', name: '特定场景0',  img: '', log:0.0, lat:0.0, alt:0.0, pitch:0.0, roll:0.0, time: 1, }
+        this.camInfo={id:'', index:'', name: '特定场景0',  pointImg: '', log:0.0, pointLat:0.0, pointAlt:0.0, pitch:0.0, roll:0.0, time: 1, }
 
       },
       /**删除特定场景*/
@@ -262,7 +263,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.camDataArr[this.camGroupIndex].group.splice( this.activeCamIndex, 1)
+          this.camData[this.camGroupIndex].group.splice( this.activeCamIndex, 1)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -290,19 +291,19 @@
         await new Promise(resolve => setTimeout(resolve, 1000))
         this.getCamPos()
 
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].log = this.camInfo.log
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].lat = this.camInfo.lat
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].alt = this.camInfo.alt
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].heading = this.camInfo.heading
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].pitch = this.camInfo.pitch
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].roll = this.camInfo.roll
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].img = this.camInfo.img
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].log = this.camInfo.log
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].lat = this.camInfo.lat
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].alt = this.camInfo.alt
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].heading = this.camInfo.heading
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].pitch = this.camInfo.pitch
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].roll = this.camInfo.roll
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].Img = this.camInfo.Img
 
       },
       /**更改特定场景*/
       camEdit () {
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].name = this.camInfo.name;
-        this.camDataArr[this.camGroupIndex].group[this.activeCamIndex].time = this.camInfo.time;
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].name = this.camInfo.name;
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].time = this.camInfo.time;
         this.isShowDlgCamEdit = false
 
       },
@@ -341,7 +342,7 @@
         reader.onload = function () {
           if (reader.result) {
             //显示文件内容
-            that.camDataArr = JSON.parse(reader.result)
+            that.camData = JSON.parse(reader.result)
 
           }
         }
@@ -350,7 +351,7 @@
       },
       /**保存相机点*/
       onCamDataArrSave () {
-        var content = JSON.stringify(this.camDataArr)
+        var content = JSON.stringify(this.camData)
         var blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
         FileSaver.saveAs(blob, 'cam.json')
       },
@@ -358,7 +359,7 @@
       /**场景组播放*/
       async onCamGroupPlay () {
         let that = this
-        let camGroup = this.camDataArr[this.camGroupIndex].group
+        let camGroup = this.camData[this.camGroupIndex].group
         let ai = this.activeCamIndex
         this.isFly = true;
         for (let i = ai; i < camGroup.length; i++) {

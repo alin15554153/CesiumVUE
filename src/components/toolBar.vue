@@ -14,7 +14,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </a>
-      <a id='layerMangerBtn' title='图层列表' class='btn'> <span class='iconfont icon-shu' ></span></a>
+      <a id='layerMangerBtn' title='图层列表' class='btn'> <span class='iconfont icon-shu' @click="onLayerBtnClk"></span></a>
       <a class='btn'><span style='border-left : 1px solid #dddddd;  padding: 0px 1px;   display:block;    height:40px;' ></span></a>
       <a id='expandBtn' style='display : none;' title='展开' class='btn'  @click="onExpandBtnClk()"><span class='iconfont icon-angle-right'></span></a>
       <div id='btnGroup' class='btn-group'>
@@ -36,9 +36,9 @@
           <el-dropdown trigger="hover" placement="bottom">
             <span class='iconfont icon-shiliang'></span>
             <el-dropdown-menu>
-              <el-dropdown-item><a   title='点' class='btn'><span class='iconfont icon-dian'></span></a></el-dropdown-item>
-              <el-dropdown-item><a   title='线' class='btn'><span class='iconfont icon-icon-line-graph'></span></a></el-dropdown-item>
-              <el-dropdown-item><a   title='面' class='btn'><span class='iconfont icon-mian'></span></a></el-dropdown-item>
+              <el-dropdown-item><a   title='点' class='btn'><span class='iconfont icon-dian' @click="onPointBtnClk"></span></a></el-dropdown-item>
+              <el-dropdown-item><a   title='线' class='btn'><span class='iconfont icon-icon-line-graph' @click="onLineBtnClk"></span></a></el-dropdown-item>
+              <el-dropdown-item><a   title='面' class='btn'><span class='iconfont icon-mian' @click="onPloygonBtnClk"></span></a></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </a>
@@ -54,7 +54,7 @@
         <measurBarGroup></measurBarGroup>
 
         <a title='分屏对比' class='btn' @click="onSplitScreen"><span class='iconfont icon-fenpingduibi'></span></a>
-        <a title='特效' class='btn' @click="openMask()"><span class='iconfont icon-texiao'></span></a>
+        <a title='特效' class='btn' @click="openMask()"><span class='iconfont icon-texiao' @click="onEffectsBtnClk"></span></a>
         <a title='系统设置' class='btn' @click="openMask()"><span class='iconfont icon-icon_shezhi'></span></a>
         <a title='初始位置' class='btn' @click="setView(108.4,23.5, 800000)"><span class='iconfont icon-zhuye'></span></a>
         <a class='btn'><span style='border-left : 1px solid #dddddd;  padding: 0px 1px;   display:block;    height:40px;' ></span></a>
@@ -100,9 +100,28 @@ export default {
       $('#btnGroup').show()
       $('#expandBtn').hide()
     },
+    onLayerBtnClk(){
+      this.$parent.$data.isShowLayer = true//显示路径面板
+    },
+    onBaseLayerBtnClk (name) {
+      this.$store.dispatch('setBbaseLayerGroupPageName',name)
+      this.$parent.$data.isShowBaseLayer = true//显示底图面板
+    },
     //显示加载模型对话框
     onModel3dBtnClk(){
       this.$parent.$data.isShowModel3d = true//显示路径面板
+    },
+    onPointBtnClk(){
+      this.$parent.$data.isShowPoint = true//显示路径面板
+    },
+    onLineBtnClk(){
+      this.$parent.$data.isShowLine = true//显示路径面板
+    },
+    onPloygonBtnClk(){
+      this.$parent.$data.isShowPloygon = true//显示路径面板
+    },
+    onEffectsBtnClk(){
+      this.$parent.$data.isShowEffects = true//显示路径面板
     },
     //显示路径导航对话框
     onDlgPathNavBtnClk (name) {
@@ -126,10 +145,7 @@ export default {
         }
       }
     },
-    onBaseLayerBtnClk (name) {
-      this.$store.dispatch('setBbaseLayerGroupPageName',name)
-      this.$parent.$data.isShowBaseLayer = true//显示底图面板
-    },
+
     setView (lon, lat, height) {
       this.viewer.camera.setView({
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, height), // 设置位置

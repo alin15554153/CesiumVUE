@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header height='40px'>
-      <el-button type="text" title="添加" icon="el-icon-plus" @click="onLayerAdd"></el-button>
+      <el-button type="text" title="添加" icon="el-icon-plus" @click="onLayerAddOpen"></el-button>
       <el-button type="text" title="删除" icon="el-icon-delete-solid" @click="onLayerRemove"></el-button>
       <el-button type="text" title="重命名" icon="el-icon-edit" @click="onLayerEdit"></el-button>
     </el-header>
@@ -35,52 +35,36 @@
 </template>
 
 <script>
-  let id = 1000
+  import eventBus from '../js/eventBus'
+  let id = 1
   export default {
     name: 'dlgLayer',
 
     data () {
       return {
         lastNodeSel: undefined,
-        layerTreeData: [{
-          id: 0,
-          label: '根节点',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }],
+        layerTreeData: [],
         defaultProps: {
           children: 'children',
           label: 'label'
         }
       }
     },
+    created() {
+      eventBus.$on('getTarget', target => {
+        console.log(target);
+      });
+      eventBus.$on('layerAdd', name => {
+        this.layerAdd(name,true)
+      });
+    },
     methods: {
       nodeClick (ev) {
-
         let cn = this.$refs.tree.getCurrentNode()
         console.log(cn)
         if (this.lastNodeSel === undefined) {
-          this.lastNodeSel = cn
           this.$refs.tree.$el.className = 'el-tree el-tree--highlight-current'
+          this.lastNodeSel = cn
           return
         }
         if (this.lastNodeSel === cn) {
@@ -88,7 +72,7 @@
           this.lastNodeSel = undefined
         } else {
           this.$refs.tree.$el.className = 'el-tree el-tree--highlight-current'
-          this.lastNodeSel=cn
+          this.lastNodeSel = cn
         }
       },
       handleDragStart (node, ev) {
@@ -119,20 +103,50 @@
       allowDrag (draggingNode) {
         return draggingNode.data.label.indexOf('三级 3-2-2') === -1
       },
-      onLayerAdd () {
+      layerAdd (layerName, isFinal) {
         let data = this.$refs.tree.getCurrentNode()
-        const newChild = { id: id++, label: 'testtest', children: [] }
-        if (!data || this.lastNodeSel ===undefined) {
+        if (data) {
+          if (data.isFinal === true) {
+            alert('终止节点类型禁止添加子节点')
+            return
+          }
+        }
+        const newChild = { id: id++, label: layerName, children: [], isFinal: isFinal }
+        if (!data || this.lastNodeSel === undefined) {
           this.layerTreeData.push(newChild)
           return
         }
-        if (!data.children && this.lastNodeSel !==undefined) {
+        if (!data.children && this.lastNodeSel !== undefined) {
           this.$set(data, 'children', [])
         }
-        if(data){
+        if (data) {
           data.children.push(newChild)
         }
-
+      },
+      onLayerAddOpen () {
+        let data = this.$refs.tree.getCurrentNode()
+        if (data) {
+          if (data.isFinal === true) {
+            alert('终止节点类型禁止添加子节点')
+            return
+          }
+        }
+        this.$prompt('请输入图层名称', '提示', {
+          inputValue: '图层' + id,
+          cancelButtonText: '取消',
+          confirmButtonText: '确定',
+        }).then(({ value }) => {
+          this.layerAdd(value, false)
+          this.$message({
+            type: 'success',
+            message: '你的图层名名称是: ' + value
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
       },
       onLayerEdit () {
         let data = this.$refs.tree.getCurrentNode()
@@ -146,7 +160,6 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({ value }) => {
-
           data.label = value
           this.$message({
             type: 'success',

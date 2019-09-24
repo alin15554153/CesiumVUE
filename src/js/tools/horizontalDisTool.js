@@ -123,7 +123,7 @@ HorizontalDisTool.prototype.createPolyline = function () {
           polyline: {
                 positions: callbackPositions,
                 clampToGround: false,
-                width: 4,
+                pointWidth: 4,
                 show:true,
                 material : Cesium.Color.GREEN,
             }
@@ -166,7 +166,7 @@ HorizontalDisTool.prototype.createLabel = function (index) {
           backgroundPadding:new Cesium.Cartesian2(7, 5),
           scale:1.0,
           horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
-          verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+          pointBillBoardVerticalOrigin : Cesium.VerticalOrigin.BOTTOM,
           eyeOffset : Cesium.Cartesian3.ZERO,
           pixelOffset : new Cesium.Cartesian2(0, -10),
           //translucencyByDistance,
