@@ -60,7 +60,7 @@
         </el-dialog>
 
         <el-main>
-          <el-collapse v-model="camGroupName" accordion @change="onCamChange">
+          <el-collapse v-model="camGroupName" accordion @change="onCamGroupChange">
             <el-collapse-item v-for="(camGroup,camGroupIndex) in camData"
                               :key="camGroup.id"
                               :title="camGroup.camGroupName"
@@ -69,10 +69,10 @@
               <div class="camDiv"
                    v-for="(camInfo,camIndex) in camGroup.group">
 
-                <img  class='camImg'
-                      :src="camInfo.Img"
-                      :ref="`camGroup${camGroupIndex}`+`cam${camIndex}`"
-                      alt=""
+                <img class='camImg'
+                     :src="camInfo.img"
+                     :ref="`camGroup${camGroupIndex}`+`cam${camIndex}`"
+                     alt=""
                      @click="onCamImg(camInfo,camGroupIndex,camIndex)"/>
                 <p class="pictext">{{camInfo.name +':' + camInfo.time +'秒'}}</p>
               </div>
@@ -111,10 +111,10 @@
         camData: [],
         activeTapName: 'first',
         camGroupName: '特定场景组1',
-        camGroupIndex:0,
+        camGroupIndex: -1,
         activeCamIndex: -1,
 
-        isFly :true,
+        isFly: true,
         isShowDlgCamAdd: false,
         isShowDlgCamEdit: false,
         isShowDlgCamLoad: false,
@@ -124,16 +124,16 @@
           // id:'',
           // index:0,
           name: '特定场景0',
-          Img: '',
-          log:0.0,
-          lat:0.0,
-          alt:0.0,
-          heading:0.0,
-          pitch:0.0,
-          roll:0.0,
+          img: '',
+          log: 0.0,
+          lat: 0.0,
+          alt: 0.0,
+          heading: 0.0,
+          pitch: 0.0,
+          roll: 0.0,
           time: 1,
         },
-        lastCamImgDom:undefined,
+        lastCamImgDom: undefined,
 
       }
     },
@@ -147,19 +147,19 @@
         // console.log(tab, event)
       },
       /** 场景组切换折叠通知所有操作基于场景数据中哪个场景组 */
-      onCamChange (collapse) {
+      onCamGroupChange (collapse) {
         this.camGroupIndex = this.camData.findIndex(item => item.camGroupName === this.camGroupName)
       },
       /**场景组新建*/
       onCamGroupAdd () {
         this.$prompt('请输入特定场景组名称', '提示', {
-          inputValue:'特定场景组'+this.camData.length,
+          inputValue: '特定场景组' + this.camData.length,
           cancelButtonText: '取消',
           confirmButtonText: '确定',
         }).then(({ value }) => {
           this.camGroupName = value
           this.camData.push({ 'camGroupName': value, 'group': [] })
-          this.onCamChange()
+          this.onCamGroupChange()
           this.$message({
             type: 'success',
             message: '你的定场景组名称是: ' + value
@@ -194,7 +194,7 @@
       onCamGroupEdit () {
         let that = this
         this.$prompt('请输入特定场景组名称', '提示', {
-          inputValue:'特定场景组'+this.camGroupIndex,
+          inputValue: '特定场景组' + this.camGroupIndex,
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({ value }) => {
@@ -227,6 +227,10 @@
       },
       /**弹出对话框添写特定场景名称和时间*/
       onCamAddOpen () {
+        if (this.camGroupIndex === -1) {
+          alert('请先建立分组')
+          return
+        }
         this.isShowDlgCamAdd = true
         var canvas = this.viewer.scene.canvas
         window.pageYOffset = 0
@@ -245,15 +249,26 @@
         this.getCamPos()
         var copy = JSON.parse(JSON.stringify(this.camInfo)) //深copy
         let index = this.camData[this.camGroupIndex].group.length
-        if(this.activeCamIndex===index-1){
+        if (this.activeCamIndex === index - 1) {
           this.camData[this.camGroupIndex].group.push(copy)
-          this.camImgHighlight(this.camGroupIndex,index)
-        }else {
-          this.camData[this.camGroupIndex].group.splice(this.activeCamIndex+1,0,copy)
-          this.camImgHighlight(this.camGroupIndex,this.activeCamIndex+1)
+          this.camImgHighlight(this.camGroupIndex, index)
+        } else {
+          this.camData[this.camGroupIndex].group.splice(this.activeCamIndex + 1, 0, copy)
+          this.camImgHighlight(this.camGroupIndex, this.activeCamIndex + 1)
         }
 
-        this.camInfo={id:'', index:'', name: '特定场景0',  pointImg: '', log:0.0, pointLat:0.0, pointAlt:0.0, pitch:0.0, roll:0.0, time: 1, }
+        this.camInfo = {
+          id: '',
+          index: '',
+          name: '特定场景0',
+          pointImg: '',
+          log: 0.0,
+          pointLat: 0.0,
+          pointAlt: 0.0,
+          pitch: 0.0,
+          roll: 0.0,
+          time: 1,
+        }
 
       },
       /**删除特定场景*/
@@ -263,7 +278,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.camData[this.camGroupIndex].group.splice( this.activeCamIndex, 1)
+          this.camData[this.camGroupIndex].group.splice(this.activeCamIndex, 1)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -297,19 +312,19 @@
         this.camData[this.camGroupIndex].group[this.activeCamIndex].heading = this.camInfo.heading
         this.camData[this.camGroupIndex].group[this.activeCamIndex].pitch = this.camInfo.pitch
         this.camData[this.camGroupIndex].group[this.activeCamIndex].roll = this.camInfo.roll
-        this.camData[this.camGroupIndex].group[this.activeCamIndex].Img = this.camInfo.Img
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].img = this.camInfo.img
 
       },
       /**更改特定场景*/
       camEdit () {
-        this.camData[this.camGroupIndex].group[this.activeCamIndex].name = this.camInfo.name;
-        this.camData[this.camGroupIndex].group[this.activeCamIndex].time = this.camInfo.time;
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].name = this.camInfo.name
+        this.camData[this.camGroupIndex].group[this.activeCamIndex].time = this.camInfo.time
         this.isShowDlgCamEdit = false
 
       },
       /**飞到指定位置*/
-      onCamImg (camInfo,camGroupIndex,camIndex) {
-        this.camImgHighlight(camGroupIndex,camIndex)
+      onCamImg (camInfo, camGroupIndex, camIndex) {
+        this.camImgHighlight(camGroupIndex, camIndex)
         this.activeCamIndex = camIndex//以经飞过的排序号
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(camInfo.log, camInfo.lat, camInfo.alt),
@@ -323,15 +338,15 @@
         })
       },
       /**img高亮*/
-      async camImgHighlight(camGroupIndex,camIndex){
+      async camImgHighlight (camGroupIndex, camIndex) {
         this.activeCamIndex = camIndex
         await new Promise(resolve => setTimeout(resolve, 200))
-        let camImgDom = this.$refs[`camGroup${camGroupIndex}`+`cam${camIndex}`][0]
+        let camImgDom = this.$refs[`camGroup${camGroupIndex}` + `cam${camIndex}`][0]
 
-        if(this.lastCamImgDom!==undefined){
-          this.lastCamImgDom.setAttribute('class','camImg')
+        if (this.lastCamImgDom !== undefined) {
+          this.lastCamImgDom.setAttribute('class', 'camImg')
         }
-        camImgDom.setAttribute('class','camImgSel')
+        camImgDom.setAttribute('class', 'camImgSel')
         this.lastCamImgDom = camImgDom
       },
       /**选择文件*/
@@ -361,19 +376,19 @@
         let that = this
         let camGroup = this.camData[this.camGroupIndex].group
         let ai = this.activeCamIndex
-        this.isFly = true;
+        this.isFly = true
         for (let i = ai; i < camGroup.length; i++) {
-          if(that.isFly ==true){
-            that.onCamImg(camGroup[i],this.camGroupIndex,i)
+          if (that.isFly == true) {
+            that.onCamImg(camGroup[i], this.camGroupIndex, i)
             await new Promise(resolve => setTimeout(resolve, camGroup[i].time * 1000))
           }
           this.activeCamIndex = i
         }
       },
       /**场景组暂停*/
-      onCamGroupPlayPause(){
-        this.isFly = false;
-        this.viewer.camera.cancelFlight();
+      onCamGroupPlayPause () {
+        this.isFly = false
+        this.viewer.camera.cancelFlight()
       },
       onViewType (event) {
         if (event.path[0].tagName === 'I') {
@@ -413,11 +428,13 @@
     border: 2px solid #2ec5ad;
 
   }
+
   #dlgPathNav .camDiv .camImgSel {
     width: 88px;
     height: 45px;
     border: 4px solid #409EFF;
   }
+
   #dlgPathNav .camDiv .camImg:hover {
     border: 2px solid #409EFF;
 

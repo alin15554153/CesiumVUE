@@ -12,76 +12,145 @@
                        @click="onPointEdit"></el-button>
             <el-button type="text" :class="[isMove ? 'el-buttonSel':'el-button']" title="启动移动" icon="el-icon-rank"
                        @click="onPointMove"></el-button>
+
+            <el-divider direction="vertical"></el-divider>
+            <el-button type="text" title="保存" icon="el-icon-download"
+                       @click="onJsonSave"></el-button>
+            <el-button type="text" title="读取" icon="el-icon-folder-opened"
+                       @click="isShowDlgPointJsonLoad= true"></el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" title="添加自定义符号" icon="el-icon-plus" @click="onImgAdd"></el-button>
             <el-button type="text" title="删除自定义符号" icon="el-icon-delete" @click="onImgDel"></el-button>
-            <el-button type="text" title="读取自定义符号" icon="el-icon-folder-opened" @click="onImgLoad"></el-button>
-            <el-button type="text" title="导出自定义符号" icon="el-icon-download" @click="onImgSave"></el-button>
+            <el-button type="text" title="读取自定义符号" icon="el-icon-folder-opened"></el-button>
+            <el-button type="text" title="导出自定义符号" icon="el-icon-download"></el-button>
             <el-button type="text" title="上传自定义符号" icon="el-icon-upload2" @click="onImgUpdata"></el-button>
-            <el-button type="text" title="上传自定义符号" icon="el-icon-upload2"
-                       @click.stop.prevent="doClick($event)"></el-button>
+            <!--            <el-button type="text" title="上传自定义符号" icon="el-icon-upload2"-->
+            <!--                       @click.stop.prevent="doClick($event)"></el-button>-->
+
           </el-row>
         </el-header>
+        <el-dialog :visible.sync="isShowDlgPointJsonLoad" width=300px :append-to-body=true :destroy-on-close=true>
+          <input type="file" ref="filElem" class="upload-file" @change="onJsonLoad">
+          <div slot="footer" class="dialog-footer">
+            <!--            <el-button type="primary" @click="isShowDlgCamLoad = false">确 定</el-button>-->
+          </div>
+        </el-dialog>
         <el-main>
           <el-collapse v-model="activeCollapseNames">
-            <el-collapse-item title="标准符号设置" name="1">
+            <el-collapse-item title="基本设置" name="1">
               <el-row>
                 <el-col :span="4">
-                  <el-tag>名称:</el-tag>
+                  <el-tag>图层:</el-tag>
                 </el-col>
-                <el-col :span="12">
-                  <el-input v-model="pointInfo.name" placeholder="请输入名称"></el-input>
+                <el-col :span="5">
+                  <el-input v-model="pointInfo.labelText" placeholder="图层名"></el-input>
                 </el-col>
-                <el-col :span="8">
-                  <el-checkbox v-model="pointInfo.nameShow" label="显  示" border size="mini"
-                               @change="onPointNameShow"></el-checkbox>
+                <el-col :span="3">
+                  <el-checkbox v-model="pointInfo.isPoint">点</el-checkbox>
+                </el-col>
+                <el-col :span="4">
+                  <el-checkbox v-model="pointInfo.isPoint">Label</el-checkbox>
+                </el-col>
+                <el-col :span="4">
+                  <el-checkbox v-model="pointInfo.isPoint">BillBoard</el-checkbox>
                 </el-col>
               </el-row>
-
+            </el-collapse-item>
+            <el-collapse-item title="点属性设置" name="2">
               <el-row>
-                <el-col :span="4">
-                  <el-tag>缩放:</el-tag>
+                <el-col :span="3">
+                  <el-tag>尺寸:</el-tag>
                 </el-col>
-                <el-col :span="12">
-                  <el-input-number v-model="pointInfo.scale" :min="1" :max="10" label="描述文字" size="mini"
-                                   @change="onPointScale"></el-input-number>
+                <el-col :span="3">
+                  <el-input v-model.number="pointOptions.pixelSize"></el-input>
                 </el-col>
-                <el-col :span="4">
-                  <el-tag>颜色:</el-tag>
+                <el-col :span="3">
+                  <el-tag>点色:</el-tag>
                 </el-col>
-                <el-col :span="4">
-                  <el-color-picker v-model="pointInfo.color"
+                <el-col :span="2">
+                  <el-color-picker v-model="pointOptions.colorCss"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                                   @change="onPointColor"></el-color-picker>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>边宽:</el-tag>
+                </el-col>
+                <el-col :span="3">
+                  <el-input v-model="pointOptions.outlineWidth"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>边色:</el-tag>
+                </el-col>
+                <el-col :span="3">
+                  <el-color-picker v-model="pointOptions.outlineColorCss"
                                    show-alpha
                                    :predefine="pointColorPredefine" size="mini"
                                    @change="onPointColor"></el-color-picker>
                 </el-col>
               </el-row>
-
               <el-row>
-                <el-col :span="4">
-                  <el-tag>高度:</el-tag>
-                </el-col>
-                <el-col :span="10">
-                  <el-input-number v-model="pointInfo.height" :min="1" :max="10" label="挤出高度" size="mini"
-                                   @change="onPointHeight"></el-input-number>
+                <el-col :span="6">
+                  <el-tag>近缩放距离:</el-tag>
                 </el-col>
                 <el-col :span="6">
-                  <el-tag>顶部颜色:</el-tag>
+                  <el-input v-model="pointOptions.scaleNear"
+                            maxlength="10"
+                            @keyup.native="onPointScaleNear"></el-input>
                 </el-col>
                 <el-col :span="4">
-                  <el-color-picker v-model="pointInfo.heightColor"
-                                   show-alpha
-                                   :predefine="pointColorPredefine" size="mini"
-                                   @change="onPointHeightColor"></el-color-picker>
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointOptions.scaleNearValue"
+                            maxlength="5"
+                  ></el-input>
                 </el-col>
               </el-row>
-
-
               <el-row>
+                <el-col :span="6">
+                  <el-tag>远缩放距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointOptions.scaleFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointOptions.scaleFarValue"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>近裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="pointOptions.displayNear"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>远裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointOptions.displayFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="4">
+                  <el-checkbox v-model="pointInfo.isWave">动态</el-checkbox>
+                </el-col>
                 <el-col :span="5">
                   <el-tag>波纹半径:</el-tag>
                 </el-col>
-                <el-col :span="10">
+                <el-col :span="6">
                   <el-slider v-model="pointInfo.diffusionRadius" @change="onPointDiffusionRadius"></el-slider>
                 </el-col>
                 <el-col :span="4">
@@ -112,20 +181,272 @@
                 </el-col>
               </el-row>
             </el-collapse-item>
-            <el-collapse-item title="公共图像符号" name="2">
+            <el-collapse-item title="Label设置" name="3">
+              <el-row>
+
+                <el-col :span="4">
+                  <el-radio v-model="labelOptions.dataSource" label="1">手动</el-radio>
+                </el-col>
+                <el-col :span="4">
+                  <el-radio v-model="labelOptions.dataSource" label="2">挂接</el-radio>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>手动:</el-tag>
+                </el-col>
+                <el-col :span="10">
+                  <el-input v-model="labelOptions.text"></el-input>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="2">
+                  <el-tag>表:</el-tag>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="labelOptions.table"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>字段:</el-tag>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="labelOptions.field"></el-input>
+                </el-col>
+                <el-col :span="2">
+                  <el-tag>值:</el-tag>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="labelOptions.value"></el-input>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="4">
+                  <el-tag>填充:</el-tag>
+                </el-col>
+                <el-col :span="3">
+                  <el-color-picker v-model="labelOptions.fillColorCss"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                  ></el-color-picker>
+                </el-col>
+                <el-col :span="5">
+                  <el-tag>轮廓颜色:</el-tag>
+                </el-col>
+                <el-col :span="3">
+                  <el-color-picker v-model="labelOptions.outlineColorCss"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                  ></el-color-picker>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>宽度:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="labelOptions.outlineWidth"></el-input>
+                </el-col>
+              </el-row>
+
+
+              <el-row>
+                <el-col :span="4">
+                  <el-checkbox v-model="labelOptions.showBackground">背景</el-checkbox>
+                </el-col>
+                <el-col :span="2">
+                  <el-color-picker v-model="labelOptions.backgroundColorCss"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                                   @change="onPointColor"></el-color-picker>
+                </el-col>
+                <el-col :span="8">
+                  <el-select v-model="labelOptions.horizontalOption" placeholder="水平轴">
+                    <el-option
+                      v-for="item in labelOptions.horizontalOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="8">
+                  <el-select v-model="labelOptions.verticalOption" placeholder="垂直轴">
+                    <el-option
+                      v-for="item in labelOptions.verticalOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>近缩放距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="labelOptions.scaleNear"
+                            maxlength="10"
+                            @keyup.native="onPointScaleNear"></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="labelOptions.scaleNearValue"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>远缩放距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="labelOptions.scaleFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="labelOptions.scaleFarValue"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>近裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="labelOptions.displayNear"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>远裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="labelOptions.displayFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+              </el-row>
+
+            </el-collapse-item>
+            <el-collapse-item title="billboard设置" name="4">
+              <el-row>
+                <el-col :span="11">
+                  <el-select v-model="billboardOptions.horizontalOption" placeholder="水平轴">
+                    <el-option
+                      v-for="item in billboardOptions.horizontalOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="11">
+                  <el-select v-model="billboardOptions.verticalOption" placeholder="垂直轴">
+                    <el-option
+                      v-for="item in billboardOptions.verticalOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>图片宽度:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.width"
+                            maxlength="10"></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>宽度:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.height"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>近缩放距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.scaleNear"
+                            maxlength="10"
+                            @keyup.native="onPointScaleNear"></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.scaleNearValue"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>远缩放距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.scaleFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="4">
+                  <el-tag>比例:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.scaleFarValue"
+                            maxlength="5"
+                  ></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-tag>近裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="billboardOptions.displayNear"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>远裁剪距离:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="billboardOptions.displayFar"
+                            maxlength="10"
+                  ></el-input>
+                </el-col>
+              </el-row>
+
+            </el-collapse-item>
+            <el-collapse-item title="公共图像符号" name="5">
               <div class="billboardDiv" v-for="(billboard,billboardIndex) in billboardsDataPub">
                 <img
                   class='billboardImg'
                   :src="billboard.image"
                   :ref="`billboard${billboardIndex}`"
                   alt=""
-                  @click="onImgSel(billboardIndex)"></div>
+                  @click="onImgSel(billboardIndex,billboard.image)"></div>
             </el-collapse-item>
-            <el-collapse-item title="私有图像符号" name="3">
+            <el-collapse-item title="私有图像符号" name="6">
 
 
             </el-collapse-item>
-            <el-collapse-item title="其它设置" name="4">
+            <el-collapse-item title="精确放置" name="7">
               <el-row>
                 <el-col :span="4">
                   <el-tag>坐标:</el-tag>
@@ -138,7 +459,7 @@
                 </el-col>
               </el-row>
             </el-collapse-item>
-            <el-collapse-item title="WFS读取设置" name="5">
+            <el-collapse-item title="WFS读取设置" name="8">
               <el-row>
                 <el-col :span="23">
                   <el-input placeholder="请输入路径地址" v-model="pointWfsInfo.url">
@@ -148,14 +469,78 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="6">
-                  <el-tag>高度字段:</el-tag>
-                </el-col>
-                <el-col :span="6">
-                  <el-input v-model="pointWfsInfo.height" placeholder="字段名"></el-input>
-                </el-col>
                 <el-col :span="5">
-                  <el-tag>半径字段:</el-tag>
+                  <el-checkbox v-model="pointWfsInfo.isHeight">高度图</el-checkbox>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>字段:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.heightField" placeholder="字段名"></el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>高度颜色:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-color-picker v-model="pointWfsInfo.heightColor"
+                                   show-alpha
+                                   :predefine="pointColorPredefine" size="mini"
+                                   @change="onPointHeightColor"></el-color-picker>
+                </el-col>
+              </el-row>
+
+              <el-row>
+
+                <el-col :span="5">
+                  <el-tag>截面形状:</el-tag>
+                </el-col>
+                <el-col :span="8">
+                  <el-select v-model="pointWfsInfo.heightShape" placeholder="水平轴">
+                    <el-option
+                      v-for="item in pointWfsInfo.shapeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="6">
+                  <el-tag>截面半径:</el-tag>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="pointWfsInfo.shapeSize"></el-input>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="5">
+                  <el-checkbox v-model="pointWfsInfo.isHeight">动点图</el-checkbox>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>字段:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.heightField" placeholder="字段名"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>半径:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.size" placeholder="字段名"></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="5">
+                  <el-checkbox v-model="pointWfsInfo.isHeight">热力图</el-checkbox>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>字段:</el-tag>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pointWfsInfo.heightField" placeholder="字段名"></el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-tag>半径:</el-tag>
                 </el-col>
                 <el-col :span="6">
                   <el-input v-model="pointWfsInfo.size" placeholder="字段名"></el-input>
@@ -167,24 +552,27 @@
         </el-main>
       </el-container>
     </el-tab-pane>
-
-
   </el-tabs>
+
+
 </template>
 
 <script>
   import eventBus from '../js/eventBus'
   import mixin from '../js/mixin'
 
+  var FileSaver = require('file-saver')
   export default {
     mixins: [mixin],
     name: 'dlgPoint',
     components: {},
     data () {
       return {
+
+        isShowDlgPointJsonLoad: false,
+        activeCollapseNames: ['1', '2', '3', '4', '5', '6', '7', '8'],
         activeBillboardIndex: -1,//记录当前选中dom对应数据的索引
         lastbillboardImgDom: undefined,
-        activeCollapseNames: ['1', '2', '3', '4','5'],
         activeTapName: 'first',
         isDraw: false,
         isDel: false,
@@ -194,35 +582,130 @@
         billboardsDataPub: '',
         /**所有绘制的点的Entity集合*/
         pointEntitySet: [],
+        pointLabelEntitySet: [],
+        pointBillboardEntitySet: [],
         /**所有绘制的点的Json参数集合用于保存与读取*/
         pointJsonSet: [],
-        /**单点信息*/
-        pointWfsInfo:{
-          url:'',
-          height:'',
-          size:'',
+
+        pointWfsInfo: {
+          url: '',
+          isHeight: false,
+          heightField: '',
+          heightColor: 'rgba(255, 69, 0, 0.68)',
+          heightShape: '正方形',
+          shapeOptions: [
+            { value: 1, label: '正方形' },
+            { value: 2, label: '圆形' },
+            { value: 3, label: '三角形' },
+            { value: 4, label: '五星' },
+          ],
+          shapeSize: '',
+        },
+
+        pointOptions: {
+          isShow: true,
+          pixelSize: 10,
+          colorCss: 'rgba(255, 69, 0, 0.68)',
+          outlineColorCss: 'rgba(46,197,173,0.51)',
+          outlineWidth: 2,
+          // heightReference: Cesium.HeightReference.none,
+          // translucencyByDistance:new Cesium.NearFarScalar(10000,1,50000,0.5),
+          scaleNear: 10000,
+          scaleNearValue: 1,
+          scaleFar: 50000,
+          scaleFarValue: 5,
+          displayNear: 0,
+          displayFar: 500000,
+          disableDepthTestDistance: 5000000,
 
         },
+        labelOptions: {
+          isShow: true,
+          dataSource: '1',
+          text: 'test',
+          table: 'pointInfo',
+          field: 'id',
+          value: '1',
+          font: '30px sans-serif',
+          style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+          // scale:1,
+          showBackground: true,
+          backgroundColorCss: 'rgba(0,0,0,0.92)',
+          backgroundPadding: new Cesium.Cartesian2(7, 5),
+          // pixelOffset:new Cesium.Cartesian2(0, -20),
+          // eyeOffset:new Cesium.Cartesian3(10, 45,0),
+          horizontalOption: 0,
+          horizontalOptions: [
+            { value: Cesium.HorizontalOrigin.CENTER, label: '水平中轴' },
+            { value: Cesium.HorizontalOrigin.LEFT, label: '水平左轴' },
+            { value: Cesium.HorizontalOrigin.RIGHT, label: '水平右轴' },
+          ],
+          verticalOption: 1,
+          verticalOptions: [
+            { value: Cesium.VerticalOrigin.BASELINE, label: '垂直基轴' },
+            { value: Cesium.VerticalOrigin.BOTTOM, label: '垂直底轴' },
+            { value: Cesium.VerticalOrigin.CENTER, label: '垂直中轴' },
+            { value: Cesium.VerticalOrigin.TOP, label: '垂直顶轴' },
+          ],
+          heightReference: Cesium.HeightReference.none,
+          fillColorCss: 'rgba(0,0,0,0.82)',
+          outlineColorCss: 'rgba(217,236,255,0.82)',
+          outlineWidth: 2,
+          // translucencyByDistance:new Cesium.NearFarScalar(10000,1,50000,0.5),
+          scaleNear: 10000,
+          scaleNearValue: 1,
+          scaleFar: 50000,
+          scaleFarValue: 5,
+          displayNear: 0,
+          displayFar: 500000,
+          disableDepthTestDistance: 5000000
+        },
+        billboardOptions: {
+          isShow: true,
+          image: '',
+          // scale:200,
+          horizontalOption: 0,
+          horizontalOptions: [
+            { value: Cesium.HorizontalOrigin.CENTER, label: '水平中轴' },
+            { value: Cesium.HorizontalOrigin.LEFT, label: '水平左轴' },
+            { value: Cesium.HorizontalOrigin.RIGHT, label: '水平右轴' },
+          ],
+          verticalOption: 1,
+          verticalOptions: [
+            { value: Cesium.VerticalOrigin.BASELINE, label: '垂直基轴' },
+            { value: Cesium.VerticalOrigin.BOTTOM, label: '垂直底轴' },
+            { value: Cesium.VerticalOrigin.CENTER, label: '垂直中轴' },
+            { value: Cesium.VerticalOrigin.TOP, label: '垂直顶轴' },
+          ],
+          heightReference: Cesium.HeightReference.none,
+          // color:new Cesium.Color(0.165, 0.165, 0.165, 0.8),
+          // rotation:0,
+          // alignedAxis:new Cesium.Cartesian3(10, 10, 10),
+          sizeInMeters: true,
+          width: 640, // default: undefined
+          height: 640,// default: undefined
+          scaleNear: 10000,
+          scaleNearValue: 1,
+          scaleFar: 50000,
+          scaleFarValue: 5,
+          displayNear: 0,
+          displayFar: 500000,
+          disableDepthTestDistance: 5000000
+        },
+        /**单点信息*/
         pointInfo: {
-
+          nameOfLayer: '',
+          isShow: true,
+          isPoint: true,
+          isLabel: true,
+          isBillboard: true,
           log: 0.0,
           lat: 0.0,
           alt: 0.0,
 
-          isBillbord: false,
-          imgUrl: '',
-          imgWidth: 128,
-          imgHeight: 128,
-          billBoardVerticalOrigin: 'BOTTOM',
-          billBoardHorizontalOrigin: 'CENTER',
-          distance: 5000,//显示距离
-
-          name: '点01',
-          nameShow: false,
-          scale: 1,
-          color: '#2EC5AD',
           height: 0,
           heightColor: '#2EC5AD',
+          isWave: false,
           diffusionRadius: 1,
           rippleType: '连续',
           rippleDirection: '正向',
@@ -245,29 +728,27 @@
           '#c7158577'
         ],
 
-        handlerPointDraw: null,
-        handlerPointHDel: null,
       }
     },//data end
-    beforeMount () {
-
-    },
-    beforeCreate () {
-
-    },
+    computed: {},
     mounted () {
       this.initImg()
     },
 
-    updated () {
-
-    },
-
     methods: {
+
+      proving1 () {
+        this.pointOptions.scaleNear = this.pointOptions.scaleNear.replace(/[^\.\d]/g, '')
+        // this.pointOptions.scaleNear = this.pointOptions.scaleNear.replace('.', '');
+      },
+      onPointScaleNear (event) {
+        // var value = event.target.value
+        this.pointOptions.scaleNear = this.clearNoNum(this.pointOptions.scaleNear)
+      },
+
       doClick (event) {
         eventBus.$emit('getTarget', event.target)
         eventBus.$emit('layerAdd', 'event.target')
-        this.hello()
       },
       initImg () {
         /**初始化公共符号数组*/
@@ -278,20 +759,39 @@
         }
         this.billboardsDataPub = copy
       },
-      onPointNameShow () {
-        // this.pointNameShow = this.pointNameShow === false
-        console.log(this.pointNameShow)
+      OptionsComputed () {
+        this.pointOptions.color = Cesium.Color.fromCssColorString(this.pointOptions.colorCss)
+        this.pointOptions.outlineColor = Cesium.Color.fromCssColorString(this.pointOptions.outlineColorCss)
+        this.pointOptions.scaleByDistance = new Cesium.NearFarScalar(this.pointOptions.scaleNear,
+          this.pointOptions.scaleNearValue, this.pointOptions.scaleFar, this.pointOptions.scaleFarValue)
+        this.pointOptions.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(this.pointOptions.displayNear,
+          this.pointOptions.displayFar)
+
+        this.labelOptions.backgroundColor = Cesium.Color.fromCssColorString(this.labelOptions.backgroundColorCss)
+        this.labelOptions.fillColor = Cesium.Color.fromCssColorString(this.labelOptions.fillColorCss)
+        this.labelOptions.outlineColor = Cesium.Color.fromCssColorString(this.labelOptions.outlineColorCss)
+        this.labelOptions.scaleByDistance = new Cesium.NearFarScalar(this.labelOptions.scaleNear,
+          this.labelOptions.scaleNearValue, this.labelOptions.scaleFar, this.labelOptions.scaleFarValue)
+        this.labelOptions.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(this.labelOptions.displayNear,
+          this.labelOptions.displayFar)
+
+        this.billboardOptions.scaleByDistance = new Cesium.NearFarScalar(this.billboardOptions.scaleNear,
+          this.billboardOptions.scaleNearValue, this.billboardOptions.scaleFar, this.billboardOptions.scaleFarValue)
+        this.billboardOptions.distanceDisplayCondition = new Cesium.DistanceDisplayCondition(
+          this.billboardOptions.displayNear,this.billboardOptions.displayFar)
+
       },
+
       onPointScale () {
 
       },
       onPointColor () {
 
       },
-      onPointHeight(){
+      onPointHeight () {
 
       },
-      onPointHeightColor(){
+      onPointHeightColor () {
 
       },
       onPointDiffusionRadius () {
@@ -308,109 +808,101 @@
       },
       /************************************************************************************开始绘点*/
       onPointDraw () {
-        let that = this
         if (this.isDraw === false) {
           this.isDraw = true
           this.isDel = false
           this.isMove = false
-          this.handlerPointDraw = new Cesium.ScreenSpaceEventHandler(that.viewer.canvas)
-
-          this.handlerPointDraw.setInputAction(function (event) {
-            var wp = event.position
-            if (!Cesium.defined(wp)) {
-              return
-            }
-            var ray = that.viewer.camera.getPickRay(wp)
-            if (!Cesium.defined(ray)) {
-              return
-            }
-            var cartesian = that.viewer.scene.globe.pick(ray, that.viewer.scene)
-            if (!Cesium.defined(cartesian)) {
-              return
-            }
-
-            // if(this.pointInfo.pointNameShow===true){
-            //   let pointLabel = new Cesium.LabelGraphics(
-            //     {
-            //       text : this.pointInfo.pointName,
-            //       scale: this.pointInfo.pointScale,
-            //     }
-            //   )
-            // }
-
-            var en = that.viewer.entities.add({
-              // show:this.pointInfo.pointNameShow,
-              position: cartesian,
-              label: {
-                text: 'test',
-                font: '22px Helvetica',
-                fillColor: Cesium.Color.BLACK
-              },
-              point: {
-                pixelSize: 10,
-                color: Cesium.Color.CHARTREUSE
-              }
-              // billboard : {
-              //   image : 'img/Label/01_zt.png',
-              //   sizeInMeters : true,
-              //   horizontalOrigin : Cesium.HorizontalOrigin.LEFT, // default
-              //   verticalOrigin : Cesium.VerticalOrigin.BOTTOM, // default: CENTER
-              //   scale : 2,
-              //   width : 25, // default: undefined
-              //   height : 12 // default: undefined
-              // }
-            })
-            that.pointEntitySet.push(en)
-          }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-
+          this.handlerInit(this.callBackPointDraw)
+          console.log(this.handler)
         } else {
           this.isDraw = false
-          this.handlerPointDraw.destroy()
+          // this.handlerDestroy()
         }
       },
-      onPointDel () {
+
+      callBackPointDraw (cartesian) {
         let that = this
+        var cartographic = Cesium.Cartographic.fromCartesian(cartesian)
+        that.pointInfo.log = Cesium.Math.toDegrees(cartographic.longitude)
+        that.pointInfo.lat = Cesium.Math.toDegrees(cartographic.latitude)
+        that.pointInfo.alt = cartographic.height
+
+        let pos = Cesium.Cartesian3.fromDegrees(that.pointInfo.log, that.pointInfo.lat, that.pointInfo.alt + 100)
+        this.OptionsComputed()
+        var en = that.viewer.entities.add({
+          position: pos,
+          point: this.pointOptions,
+          label: this.labelOptions,
+          billboard: this.billboardOptions
+        })
+
+        that.pointEntitySet.push(en)
+        let pointOne = {}
+        pointOne.id = en.id
+        pointOne.log = that.pointInfo.log
+        pointOne.lat = that.pointInfo.lat
+        pointOne.alt = that.pointInfo.alt
+        pointOne.pos = pos
+        pointOne.point = that.pointOptions
+        pointOne.label = that.labelOptions
+        pointOne.billboard = that.billboardOptions
+        that.pointJsonSet.push(pointOne)
+      },
+      onPointDel () {
         if (this.isDel === false) {
           this.isDel = true
           this.isDraw = false
           this.isMove = false
-          this.handlerPointDel = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas)
-          this.handlerPointDel.setInputAction(function (event) {
-            var wp = event.position
-            if (!Cesium.defined(wp)) {
-              return
-            }
-            let pickedPointFeature = that.viewer.scene.pick(wp)
-            console.log(pickedPointFeature)
-            if (pickedPointFeature === undefined) {
-              console.log('没有点中模型')
-            }
-
-            if (pickedPointFeature.primitive instanceof Cesium.PointPrimitive) {
-              console.log('点中了点')
-              that.viewer.entities.remove(pickedPointFeature.id)
-
-            }
-          }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+          this.handlerInit(this.callBackPointDel)
         } else {
           this.isDel = false
-          this.handlerPointDel.destroy()
+          // this.handlerDestroy()
         }
       },
-      onPointEdit(){
+      callBackPointDel (cartesian, pickedFeature) {
+        let that = this
+        if (pickedFeature === undefined) {
+          return
+        }
+        let pointIndex = this.pointJsonSet.findIndex(item => item.id === pickedFeature.id.id)
+        if (pointIndex !== -1) {
+          this.pointJsonSet.splice(this.pointIndex, 1)
+        }
+        that.viewer.entities.remove(pickedFeature.id)
+        if (pickedFeature.primitive instanceof Cesium.PointPrimitive) {
 
+        }
+      },
+      onPointEdit (a, b) {
+        console.log(a)
+        console.log(b)
+      },
+      onPointMoveh (a, b) {
+        console.log('onPointMoveh')
+        console.log(a)
+        console.log(b)
+      },
+      onPointMoveh2 (a, b) {
+        console.log('onPointMoveh2')
+        console.log(a)
+        console.log(b)
       },
       onPointMove () {
+        this.handlerInit(this.onPointMoveh)
         if (this.isMove === false) {
           this.isMove = true
           this.isDraw = false
           this.isDel = false
+
         } else {
           this.isMove = false
 
         }
       },
-      async onImgSel (billboardIndex) {
+      onPointMove2 () {
+        this.handlerInit(this.onPointMoveh2)
+      },
+      async onImgSel (billboardIndex,image) {
         this.activeBillboardIndex = billboardIndex
         await new Promise(resolve => setTimeout(resolve, 200))
         let billboardImgDom = this.$refs[`billboard${billboardIndex}`][0]
@@ -420,6 +912,8 @@
         }
         billboardImgDom.className = billboardImgDom.className === 'billboardImg' ? 'billboardImgSel' : 'billboardImg'
         this.lastbillboardImgDom = billboardImgDom
+        this.billboardOptions.image = image
+        this.pointInfo.isBillboard = true
       },
       onImgAdd () {
 
@@ -427,16 +921,37 @@
       onImgDel () {
 
       },
-      onImgLoad () {
+      onJsonLoad (event) {
+        var that = this
+        var input = event.target
+        var reader = new FileReader()
+        reader.onload = function () {
+          if (reader.result) {
+            //显示文件内容
+            that.pointJsonSet = JSON.parse(reader.result)
+          }
+        }
+        reader.readAsText(input.files[0])
+        this.isShowDlgPointJsonLoad = false
+        for (let i = 0; i < this.pointJsonSet.length; i++) {
+          var en = that.viewer.entities.add({
+            position: this.pointJsonSet[i].pos,
+            point: this.pointJsonSet[i].point,
+            label: this.pointJsonSet[i].label,
+            billboard: this.pointJsonSet[i].billboard
+          })
+          that.pointEntitySet.push(en)
+        }
 
       },
-      onImgSave () {
-
+      onJsonSave () {
+        var content = JSON.stringify(this.pointJsonSet)
+        var blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+        FileSaver.saveAs(blob, 'point.json')
       },
       onImgUpdata () {
 
       }
-
     }
   }
 </script>
@@ -467,7 +982,7 @@
   }
 
   #dlgPoint .el-main {
-    height: 100%;
+    height: 700px;
     width: 350px;
   }
 

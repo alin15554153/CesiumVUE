@@ -44,6 +44,7 @@ ToolManager.prototype.measureArea = function (onCreate) {
   this._toolArray.push(Tool);
 }
 
+
 /*ToolManager.prototype.createPolyline = function (onCreate) {
   this.clear();
 

@@ -20,6 +20,7 @@
     name: 'toolBarMeasur',
     methods:{
       measurePoint(){
+
         if (this.viewer){
           this.viewer.ToolManager.measurePoint(function () {
           });

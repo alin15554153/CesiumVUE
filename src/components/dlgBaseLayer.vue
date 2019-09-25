@@ -119,6 +119,7 @@
           else
             newoptions[i] = options[i];
         }
+
         let _mProvider = eval('new ' + providerName + '(newoptions)');
         this.viewer.imageryLayers.removeAll();
         this.viewer.imageryLayers.addImageryProvider(_mProvider);
