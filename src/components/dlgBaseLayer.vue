@@ -92,7 +92,7 @@
     },
     methods: {
       /** 切换tab */
-      onTabHandleClick (tab, event) {
+      handleClick (tab, event) {
         console.log(tab, event)
       },
       /** 设置地图 */
