@@ -14,12 +14,10 @@
     </el-tab-pane>
 
     <el-tab-pane label="服务" name="second">
-
         <el-input placeholder="请输入路径地址" v-model="tileUrl">
           <template slot="prepend">Http://</template>
           <el-button slot="append">确认</el-button>
         </el-input>
-
     </el-tab-pane>
     <el-tab-pane label="模型库" name="three">
       <el-container>
@@ -145,7 +143,7 @@
       },
 
       onModelMove(){
-        alert('请完善此编辑方法')
+        alert('请完善此编辑ww 方ww法')
       },
       onModelRotate(){
 

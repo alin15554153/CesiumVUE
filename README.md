@@ -1,4 +1,4 @@
-# webgl_vue
+# CesiumVUE
 
 ## Project setup
 ```

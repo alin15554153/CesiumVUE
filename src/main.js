@@ -10,6 +10,10 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import Index from './views/Index'
 import widget from 'cesium/Widgets/widgets.css'
+
+import axios from 'axios'
+Vue.prototype.$ajax= axios
+
 Vue.use(ElementUI);
 Vue.use(iView);
 
